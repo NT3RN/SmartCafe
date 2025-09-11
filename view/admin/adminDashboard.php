@@ -5,7 +5,7 @@
 <html>
     <head>
         <title>Admin Dashboard - Smart Cafe</title>
-        <link rel="stylesheet" href="../model/adminDashboard.css">
+        <link rel="stylesheet" href="../assets/css/adminDashboard.css">
     </head>
     <body>
         <nav class="admin-navbar">
