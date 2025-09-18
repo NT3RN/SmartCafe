@@ -31,18 +31,18 @@
             }
             else
             {
-            session_start();
-            $_SESSION["email"]=$users["email"];
-            $_SESSION["role"]=$users["role"];
-            if($users["role"]=="Admin"){
-                header("Location:../view/admin/adminDashboard.php");
-            }
-            elseif($users["role"]=="Manager"){
-                header("Location: ../view/manager/managerDashboard.php");
-            }
-            else{
-                header("Location:../view/customer/customerDashboard.php");
-            }
+                session_start();
+                $_SESSION["email"]=$users["email"];
+                $_SESSION["role"]=$users["role"];
+                if($users["role"]=="Admin"){
+                    header("Location:../view/admin/adminDashboard.php");
+                }
+                elseif($users["role"]=="Manager"){
+                    header("Location: ../view/manager/managerDashboard.php");
+                }
+                else{
+                    header("Location:../view/customer/customerDashboard.php");
+                }
             }
         }
     }
