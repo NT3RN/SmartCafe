@@ -4,8 +4,9 @@ $username = "root";
 $password = "";
 $dbName = "SmartCafe";
 
-$con = new mysqli($servername, $username, $password, $dbName);
-if ($con -> connect_error){
-    die("Connection failed: ".$con->connect_error);
+function getConnect() {
+    global $servername, $username, $password, $dbName;
+    $conn = mysqli_connect($servername, $username, $password, $dbName);
+    return $conn;
 }
 ?>
