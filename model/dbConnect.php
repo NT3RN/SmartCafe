@@ -1,12 +1,13 @@
 <?php 
 $servername = "localhost";
 $username = "root";
-$password = "";
+$dbpassword = "";
 $dbName = "SmartCafe";
 
 function getConnect() {
-    global $servername, $username, $password, $dbName;
-    $conn = mysqli_connect($servername, $username, $password, $dbName);
+    global $servername, $username, $dbpassword, $dbName;
+    $conn = mysqli_connect($servername, $username, $dbpassword, $dbName);
+    
     return $conn;
 }
 ?>

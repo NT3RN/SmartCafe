@@ -20,7 +20,30 @@
         }
 
         if($hasErr){
-            header("Location: ../view/login.php?emailErr = $")
+            header("Location: ../view/login.php?emailErr =$emailErr&passErr=$passErr");
+            exit();
+        }
+        else
+        {
+            $users = searchUser($_POST["email"], $_POST["password"]);
+            if(!$users){
+                header("Location:../view/login.php?invalidUser = Invalid User");
+            }
+            else
+            {
+            session_start();
+            $_SESSION["email"]=$users["email"];
+            $_SESSION["role"]=$users["role"];
+            if($users["role"]=="Admin"){
+                header("Location:../view/admin/adminDashboard.php");
+            }
+            elseif($users["role"]=="Manager"){
+                header("Location: ../view/manager/managerDashboard.php");
+            }
+            else{
+                header("Location:../view/customer/customerDashboard.php");
+            }
+            }
         }
     }
 
