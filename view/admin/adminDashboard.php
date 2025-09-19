@@ -1,41 +1,50 @@
 <?php
-    session_start();
-    if((isset($_SESSION["email"])) && isset($_SESSION["role"]))
-    {
-        if($_SESSION["role"] === "admin"){
-
-        }
-        else
-        {
-            header("Location:../login.php");
-        }
+session_start();
+if ((isset($_SESSION["email"])) && isset($_SESSION["role"])) {
+    if ($_SESSION["role"] === "Admin") {
+    } else {
+        header("Location:../login.php");
     }
-    else
-        {
-            header("Location:../login.php");
-        }
+} else {
+    header("Location:../login.php");
+}
 
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Admin Dashboard - Smart Cafe</title>
-        <link rel="stylesheet" href="../assets/css/adminDashboard.css">
-    </head>
-    <body>
-        <nav class="admin-navbar">
-            <div class="navbar-container">
-                <a href="#" class="navbar-head">Smart Cafe Admin</a>
-                <div class="navbar-links">
-                    <ul class="navbar-menu">
-                        <li><a href="adminDashboard.php" class="navbar-link">Dashboard</a></li>
-                        <li><a href="#" class="navbar-link">Logout</a></li>
-                    </ul>
-                </div>
+
+<head>
+    <title>SmartCafe Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/adminDashboard.css"/>
+    <link rel="icon" href="../../assets/logo.png"/>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../../assets/logo.png" alt="SmartCafe Logo" class="logo">
+            <span>SmartCafe</span>
+        </div>
+        <nav class="admin-navlist">
+        <ul>
+            <li><button>Overview</li>
+            <li><button>Orders</li>
+            <li><button>Products</li>
+            <li><button>Categories</li>
+    </nav>
+    </aside>
+    <div class="main">
+        <header>
+            <h1 id="pageTitle">Admin Dashboard</h1>
+            <div>
+                <span= id="adminUsername">Admin</span>
+                <button id="logoutBtn">Logout</button>
             </div>
-        </nav>
-        <main class="admin-main">
-            <h1>Ami admin hahahhahahahaah</h1>
+        </header>
+        <main id="mainContent">
+
         </main>
-    </body>
+    </div>
+</body>
+
 </html>
