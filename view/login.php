@@ -45,7 +45,7 @@
             </div>
             <input type="submit" name="submit" value="Login">
             <div class="forgetpass">
-                <p><a href="#">Can't access your account? </a></p>
+                <p><a href="register.php">Can't access your account? </a></p>
             </div>
         </form>
         <script src="js/login.js"></script>
