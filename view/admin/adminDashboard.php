@@ -24,7 +24,8 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <li><a href="#" id="adminTab">Admins</a></li>
                     <li><a href="#" id="managerTab">Managers</a></li>
                     <li><a href="#" id="customerTab">Customers</a></li>
-                    <li><a href="#" id="settingsTab">System Settings</a></li>
+                    <li><a href="#" id="profileTab">My Profile</a></li>
+                    <li><a href="#" id="salesTab">Sales Report</a></li>
                     <li><button id="logoutBtn">Logout</button></li>
                 </ul>
             </nav>
@@ -33,9 +34,16 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
             <section id="adminSection" class="admin-section">
                 <h2>Admin Management</h2>
                 <form id="addAdminForm">
-                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="text" name="name" placeholder="Username" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
+                    <select name="security_question" id="security_question" required>
+                        <option name="security" value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="What city were you born in?">What city were you born in?</option>
+                    </select>
+                    <input type="text" name="security_answer" placeholder="Security Answer" required>
+                    
                     <button type="submit">Add Admin</button>
                 </form>
                 <div id="adminTableContainer"></div>
@@ -46,6 +54,13 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <input type="text" name="name" placeholder="Name" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
+                    <select name="security_question" id="security_question" required>
+                        <option name="security" value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="What city were you born in?">What city were you born in?</option>
+                    </select>
+                    <input type="text" name="security_answer" placeholder="Security Answer" required>
+                    <input type="number" name="salary" placeholder="Salary" required>
                     <button type="submit">Add Manager</button>
                 </form>
                 <div id="managerTableContainer"></div>
@@ -56,13 +71,23 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <input type="text" name="name" placeholder="Name" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
+                    <select name="security_question" id="security_question" required>
+                        <option name="security" value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="What city were you born in?">What city were you born in?</option>
+                    </select>
+                    <input type="text" name="security_answer" placeholder="Security Answer" required>
                     <button type="submit">Add Customer</button>
                 </form>
                 <div id="customerTableContainer"></div>
             </section>
-            <section id="settingsSection" class="admin-section" style="display:none;">
-                <h2>System Settings</h2>
-                <p>Settings management coming soon...</p>
+            <section id="profileSection" class="admin-section" style="display:none;">
+                <h2>My Profile</h2>
+                <div id="profileContainer"></div>
+            </section>
+            <section id="salesSection" class="admin-section" style="display:none;">
+                <h2>Total Sales Report</h2>
+                <div id="salesReportContainer"></div>
             </section>
         </main>
     </div>
