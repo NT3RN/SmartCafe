@@ -1,65 +1,156 @@
 body {
-    background: #f4f6f8;
     margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f8;
 }
 
-.admin-navbar {
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 220px;
     background: #22223b;
     color: #fff;
-    padding: 10px 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.navbar-container {
-    max-width: 1100px;
-    margin: 0 auto;
+    padding: 24px 0;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-}
-
-.navbar-head {
-    font-size: 22px;
-    font-weight: bold;
-    color: #f2e9e4;
-    text-decoration: none;
-    letter-spacing: 1px;
-}
-
-.navbar-links {
-    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-.navbar-menu {
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.admin-sidebar nav ul {
     list-style: none;
-    margin: 0;
     padding: 0;
-    display: flex;
-    gap: 25px;
+    width: 100%;
 }
 
-.navbar-link {
+.admin-sidebar nav ul li {
+    margin: 18px 0;
+    text-align: left;
+}
+
+.admin-sidebar nav ul li a,
+.admin-sidebar nav ul li button {
     color: #f2e9e4;
-    text-decoration: none;
-    font-size: 1rem;
-    padding: 6px 14px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 8px 18px;
     border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
     transition: background 0.2s, color 0.2s;
+    display: block;
+    width: 100%;
 }
 
-.navbar-link:hover {
+.admin-sidebar nav ul li a:hover,
+.admin-sidebar nav ul li button:hover {
     background: #4a4e69;
     color: #fff;
 }
 
 .admin-main {
-    max-width: 1100px;
-    margin: 40px auto 0 auto;
-    padding: 24px;
+    flex: 1;
+    padding: 40px;
+    background: #f4f6f8;
+}
+
+.admin-section {
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    min-height: 400px;
+    padding: 32px;
+    margin-bottom: 32px;
+}
+
+.admin-section h2 {
+    margin-top: 0;
+    color: #22223b;
+    font-size: 24px;
+}
+
+form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+form input,
+form select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+form button {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background: #388e3c;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.admin-table th,
+.admin-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.admin-table th {
+    background: #22223b;
+    color: #fff;
+}
+
+.admin-table tr:nth-child(even) {
+    background: #f2e9e4;
+}
+
+.action-btn {
+    background: #4a4e69;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    margin-right: 4px;
+    font-size: 15px;
+}
+
+.action-btn:hover {
+    background: #22223b;
 }
