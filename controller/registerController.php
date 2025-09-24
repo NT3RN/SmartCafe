@@ -25,8 +25,19 @@ if (($_SERVER["REQUEST_METHOD"] === "POST") && isset($_POST["submit"])) {
     if ($cpass === "") { $cpassErr = "Confirm password required"; $hasErr = true; }
     elseif ($pass !== $cpass) { $cpassErr = "Passwords do not match"; $hasErr = true; }
 
-   
-    if ($sq === "") { $sqErr = "Security question required"; $hasErr = true; }
+    $allowedSq = [
+        "What is your mother’s maiden name?",
+        "What was the name of your first pet?",
+        "What city were you born in?"
+    ];
+    if ($sq === "") {
+        $sqErr = "Security question required";
+        $hasErr = true;
+    } elseif (!in_array($sq, $allowedSq, true)) {
+        $sqErr = "Invalid security question selected";
+        $hasErr = true;
+    }
+
     if ($sa === "") { $saErr = "Security answer required"; $hasErr = true; }
 
     

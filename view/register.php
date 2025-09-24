@@ -45,9 +45,22 @@
             </span>
         </div>
 
-        <div class="input-group">
-            <input type="text" name="security_question" id="security_question" placeholder="Security question (e.g, Your first pet?)" autocomplete="off"
-                   value="<?php echo isset($_GET['sq']) ? htmlspecialchars($_GET['sq']) : '' ?>">
+         <div class="input-group">
+            <select name="security_question" id="security_question">
+                <option value="">-- Select a security question --</option>
+                <?php
+                $questions = [
+                    "What is your mother’s maiden name?",
+                    "What was the name of your first pet?",
+                    "What city were you born in?"
+                ];
+                $selected = isset($_GET['sq']) ? $_GET['sq'] : '';
+                foreach ($questions as $q) {
+                    $isSel = ($selected === $q) ? 'selected' : '';
+                    echo '<option value="'.htmlspecialchars($q).'" '.$isSel.'>'.htmlspecialchars($q).'</option>';
+                }
+                ?>
+            </select>
             <span style="color:red;">
                 <?php if (isset($_GET["sqErr"])) echo htmlspecialchars($_GET["sqErr"]); ?>
             </span>
