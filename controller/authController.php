@@ -9,7 +9,6 @@
         
         $email = trim($_POST["email"]);
         $pass = trim($_POST["password"]);
-        
 
         if(empty($email)){
             $emailErr = "Email can't be empty";
@@ -34,6 +33,7 @@
             else
             {
                 session_start();
+                $_SESSION["user_id"] = $users['user_id'];
                 $_SESSION["email"]=$users["email"];
                 $_SESSION["role"]=$users["role"];
                 if($users["role"]=="Admin"){
