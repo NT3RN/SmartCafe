@@ -9,6 +9,7 @@
         
         $email = trim($_POST["email"]);
         $pass = trim($_POST["password"]);
+        
 
         if(empty($email)){
             $emailErr = "Email can't be empty";
