@@ -6,6 +6,7 @@
     $hasErr = false;
     if(($_SERVER["REQUEST_METHOD"]=="POST") && (isset($_POST["submit"])))
     {
+        
         $email = trim($_POST["email"]);
         $pass = trim($_POST["password"]);
 
