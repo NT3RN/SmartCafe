@@ -41,6 +41,7 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <input type="password" name="password" placeholder="Password" required>
                     <span class="error-message" id="admin-password-error"></span>
                     <select name="security_question" required>
+                        <option value="">-- Select Security Question --</option>
                         <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
                         <option value="What was the name of your first pet?">What was the name of your first pet?</option>
                         <option value="What city were you born in?">What city were you born in?</option>
@@ -50,7 +51,9 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <span class="error-message" id="admin-sa-error"></span>
                     <button type="submit">Add Admin</button>
                 </form>
-                <div id="adminTableContainer" class="table-container"></div>
+                <div id="adminTableContainer" class="table-container">
+                    <p>Loading Admins </p>
+                </div>
             </section>
 
             <section id="managerSection" class="admin-section" style="display:none;">
@@ -63,6 +66,7 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <input type="password" name="password" placeholder="Password" required>
                     <span class="error-message" id="manager-password-error"></span>
                     <select name="security_question" required>
+                        <option value="">-- Select Security Question --</option>
                         <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
                         <option value="What was the name of your first pet?">What was the name of your first pet?</option>
                         <option value="What city were you born in?">What city were you born in?</option>
@@ -74,7 +78,9 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <span class="error-message" id="manager-salary-error"></span>
                     <button type="submit">Add Manager</button>
                 </form>
-                <div id="managerTableContainer" class="table-container"></div>
+                <div id="managerTableContainer" class="table-container">
+                    <p>Loading Manager</p>
+                </div>
             </section>
 
             <section id="customerSection" class="admin-section" style="display:none;">
@@ -87,6 +93,7 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <input type="password" name="password" placeholder="Password" required>
                     <span class="error-message" id="customer-password-error"></span>
                     <select name="security_question" required>
+                        <option value="">-- Select Security Question --</option>
                         <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
                         <option value="What was the name of your first pet?">What was the name of your first pet?</option>
                         <option value="What city were you born in?">What city were you born in?</option>
@@ -96,7 +103,9 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <span class="error-message" id="customer-sa-error"></span>
                     <button type="submit">Add Customer</button>
                 </form>
-                <div id="customerTableContainer" class="table-container"></div>
+                <div id="customerTableContainer" class="table-container">
+                    <p>Loading Customers </p>
+                </div>
             </section>
 
             <section id="profileSection" class="admin-section" style="display:none;">
