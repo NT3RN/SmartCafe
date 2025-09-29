@@ -158,6 +158,111 @@ body {
     letter-spacing: 0.2px;
 }
 
+/* Simplified Profile Styles */
+.profile-container {
+    max-width: 100%;
+}
+
+.profile-info {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-info h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.info-item {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+.info-item strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.profile-form-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-form-container h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.profile-form {
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.update-btn {
+    background: #27ae60;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.update-btn:hover {
+    background: #219a52;
+}
+
 /* Table Styles */
 .table-container {
     overflow-x: auto;
@@ -247,37 +352,6 @@ body {
 .status.completed { background: #d4edda; color: #155724; }
 .status.cancelled { background: #f8d7da; color: #721c24; }
 
-/* Profile Styles */
-.profile-container {
-    max-width: 600px;
-}
-
-.profile-form {
-    display: grid;
-    gap: 20px;
-}
-
-.form-group {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    align-items: center;
-    gap: 15px;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.form-group input,
-.form-group select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-
-
 /* Message Styles */
 .message {
     position: fixed;
@@ -293,4 +367,5 @@ body {
 .message.success { background: #27ae60; }
 .message.error { background: #e74c3c; }
 .message.info { background: #3498db; }
+
 

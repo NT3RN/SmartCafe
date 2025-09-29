@@ -10,7 +10,6 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
 <head>
     <title>SmartCafe Admin Dashboard</title>
     <link rel="stylesheet" href="../css/adminDashboard.css"/>
-
 </head>
 <body>
     <div class="admin-container">
@@ -52,7 +51,7 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <button type="submit">Add Admin</button>
                 </form>
                 <div id="adminTableContainer" class="table-container">
-                    <p>Loading Admins </p>
+                    <p>Click on admin to see more info</p>
                 </div>
             </section>
 
@@ -104,13 +103,82 @@ if (!isset($_SESSION["email"]) || !isset($_SESSION["role"]) || $_SESSION["role"]
                     <button type="submit">Add Customer</button>
                 </form>
                 <div id="customerTableContainer" class="table-container">
-                    <p>Loading Customers </p>
+                    <p>Loading Customers</p>
                 </div>
             </section>
 
             <section id="profileSection" class="admin-section" style="display:none;">
                 <h2>My Profile</h2>
-                <div id="profileContainer" class="profile-container"></div>
+                <div id="profileContainer" class="profile-container">
+                    <div class="profile-info">
+                        <h3>Profile Information</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <strong>User ID:</strong> <span id="profile-user-id">Loading...</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Username:</strong> <span id="profile-username-display">Loading...</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Email:</strong> <span id="profile-email-display">Loading...</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Role:</strong> Admin
+                            </div>
+                            <div class="info-item">
+                                <strong>Member Since:</strong> <span id="profile-created-at">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-form-container">
+                        <h3>Update Profile</h3>
+                        <form id="updateProfileForm" class="profile-form" novalidate>
+                            <div class="form-group">
+                                <label for="profile-username">Username:</label>
+                                <input type="text" name="username" id="profile-username" required>
+                                <span class="error-message" id="profile-username-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-email">Email:</label>
+                                <input type="email" name="email" id="profile-email" required>
+                                <span class="error-message" id="profile-email-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-current-password">Current Password:</label>
+                                <input type="password" name="current_password" id="profile-current-password" required>
+                                <span class="error-message" id="profile-current-password-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-new-password">New Password (optional):</label>
+                                <input type="password" name="new_password" id="profile-new-password">
+                                <span class="error-message" id="profile-new-password-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-security-question">Security Question:</label>
+                                <select name="security_question" id="profile-security-question" required>
+                                    <option value="">-- Select Security Question --</option>
+                                    <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                                    <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                                    <option value="What city were you born in?">What city were you born in?</option>
+                                </select>
+                                <span class="error-message" id="profile-sq-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-security-answer">Security Answer:</label>
+                                <input type="text" name="security_answer" id="profile-security-answer" required>
+                                <span class="error-message" id="profile-sa-error"></span>
+                            </div>
+
+                            <button type="submit" class="update-btn">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
             </section>
         </main>
     </div>

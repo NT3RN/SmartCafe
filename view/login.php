@@ -13,7 +13,7 @@
                 </a>
             </div>
             
-            <h1>Welcome to Smart Cafe</h1>
+            <h1>Login to Smart Cafe</h1>
             
             <div>
                 <small class="classDanger" id="loginErr" style="color: red;">
