@@ -1,16 +1,41 @@
 <?php
 session_start();
-if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
-    header("Location: /SmartCafe/view/login.php"); exit();
+
+/*  Require customer login (no inline exit)
+ */
+$isLogged = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
+if (!$isLogged || $_SESSION["role"] !== "Customer") {
+    header("Location: /SmartCafe/view/login.php");
+    exit();
 }
 
-require_once($_SERVER['DOCUMENT_ROOT']."/SmartCafe/model/customer/preferenceModel.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/preferenceModel.php");
 
-$customerId = $_SESSION['customer_id'] ?? 0;
-if (!$customerId){ $customerId = pref_getCustomerIdByEmail($_SESSION['email']); }
+/*  Derive $customerId without ??
+ */
+$customerId = 0;
+if (isset($_SESSION['customer_id'])) {
+    $customerId = $_SESSION['customer_id'];
+}
 
+if (!$customerId) {
+    $emailForLookup = '';
+    if (isset($_SESSION['email'])) {
+        $emailForLookup = $_SESSION['email'];
+    }
+    $customerId = pref_getCustomerIdByEmail($emailForLookup);
+}
+
+/*  Load preferences
+ */
 $prefs = pref_all($customerId);
-$msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
+
+/*  Optional message (no ?:)
+ */
+$msg = '';
+if (isset($_GET['msg'])) {
+    $msg = htmlspecialchars($_GET['msg']);
+}
 ?>
 <!doctype html>
 <html>
@@ -36,7 +61,10 @@ $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
 
 <main class="container">
   <h1>Meal Preferences</h1>
-  <?php if ($msg): ?><div class="alert"><?php echo $msg; ?></div><?php endif; ?>
+
+  <?php if ($msg !== ''): ?>
+    <div class="alert"><?php echo $msg; ?></div>
+  <?php endif; ?>
 
   <div class="grid">
 
@@ -46,10 +74,19 @@ $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
       <form method="post" action="/SmartCafe/controller/customer/preferenceController.php">
         <input type="hidden" name="action" value="add">
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input type="text" name="preference_type" placeholder="Type (e.g., Spicy, Vegan)" required
-                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;">
-          <input type="text" name="details" placeholder="Details (optional)"
-                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;">
+          <input
+            type="text"
+            name="preference_type"
+            placeholder="Type (e.g., Spicy, Vegan)"
+            required
+            style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;"
+          >
+          <input
+            type="text"
+            name="details"
+            placeholder="Details (optional)"
+            style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;"
+          >
           <button class="btn" type="submit">Add</button>
         </div>
       </form>
@@ -58,7 +95,10 @@ $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
     <!-- List -->
     <div class="card" style="padding:16px;">
       <h3>Saved Preferences</h3>
-      <?php if (empty($prefs)): ?>
+      <?php
+      $hasPrefs = (is_array($prefs) && count($prefs) > 0);
+      if (!$hasPrefs):
+      ?>
         <p class="muted">No preferences saved yet.</p>
       <?php else: ?>
         <table class="table">
@@ -72,21 +112,57 @@ $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
             </tr>
           </thead>
           <tbody>
-          <?php $i=1; foreach($prefs as $p): ?>
+          <?php
+          $i = 1;
+          for ($x = 0; $x < count($prefs); $x++):
+              $p = $prefs[$x];
+
+              $prefId = 0;
+              if (isset($p['preference_id'])) {
+                  $prefId = (int)$p['preference_id'];
+              }
+
+              $typeRaw = '';
+              if (isset($p['preference_type'])) {
+                  $typeRaw = $p['preference_type'];
+              }
+              $typeEsc = htmlspecialchars($typeRaw);
+
+              $detailsRaw = '';
+              if (isset($p['details'])) {
+                  $detailsRaw = $p['details'];
+              }
+              $detailsEsc = htmlspecialchars($detailsRaw);
+
+              $createdRaw = '';
+              if (isset($p['created_at'])) {
+                  $createdRaw = $p['created_at'];
+              }
+              $createdEsc = htmlspecialchars($createdRaw);
+          ?>
             <tr>
-              <td><?php echo $i++; ?></td>
-              <td><?php echo htmlspecialchars($p['preference_type']); ?></td>
-              <td><?php echo htmlspecialchars($p['details'] ?? ''); ?></td>
-              <td><?php echo htmlspecialchars($p['created_at'] ?? ''); ?></td>
+              <td><?php echo $i; $i++; ?></td>
+              <td><?php echo $typeEsc; ?></td>
+              <td><?php echo $detailsEsc; ?></td>
+              <td><?php echo $createdEsc; ?></td>
               <td>
-                <a class="btn sm" href="javascript:void(0)"
-                   onclick="editPref(<?php echo $p['preference_id']; ?>,'<?php echo htmlspecialchars($p['preference_type']); ?>','<?php echo htmlspecialchars($p['details']); ?>')">Edit</a>
-                <a class="btn danger sm"
-                   href="/SmartCafe/controller/customer/preferenceController.php?action=delete&id=<?php echo (int)$p['preference_id']; ?>"
-                   onclick="return confirm('Delete this preference?');">Delete</a>
+                <a
+                  class="btn sm"
+                  href="javascript:void(0)"
+                  onclick="editPref(<?php echo $prefId; ?>,'<?php echo $typeEsc; ?>','<?php echo $detailsEsc; ?>')"
+                >
+                  Edit
+                </a>
+                <a
+                  class="btn danger sm"
+                  href="/SmartCafe/controller/customer/preferenceController.php?action=delete&id=<?php echo $prefId; ?>"
+                  onclick="return confirm('Delete this preference?');"
+                >
+                  Delete
+                </a>
               </td>
             </tr>
-          <?php endforeach; ?>
+          <?php endfor; ?>
           </tbody>
         </table>
       <?php endif; ?>
@@ -99,10 +175,21 @@ $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="pref_id" id="edit_id">
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input type="text" id="edit_type" name="preference_type" placeholder="Type" required
-                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;">
-          <input type="text" id="edit_details" name="details" placeholder="Details"
-                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;">
+          <input
+            type="text"
+            id="edit_type"
+            name="preference_type"
+            placeholder="Type"
+            required
+            style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;"
+          >
+          <input
+            type="text"
+            id="edit_details"
+            name="details"
+            placeholder="Details"
+            style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;"
+          >
           <button class="btn" type="submit">Update</button>
           <button class="btn outline" type="button" onclick="cancelEdit()">Cancel</button>
         </div>
