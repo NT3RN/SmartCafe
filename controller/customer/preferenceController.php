@@ -1,74 +1,45 @@
 <?php
 session_start();
-
 if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
-  header("Location: /SmartCafe/view/login.php"); exit();
+    header("Location: /SmartCafe/view/login.php"); exit();
 }
 
-$customer_id = (int)($_SESSION["customer_id"] ?? 0);
-if ($customer_id <= 0) { header("Location: /SmartCafe/view/login.php"); exit(); }
+require_once($_SERVER['DOCUMENT_ROOT']."/SmartCafe/model/customer/preferenceModel.php");
 
-require_once(__DIR__ . "/../../model/preferenceModel.php");
+$customerId = $_SESSION['customer_id'] ?? 0;
+if (!$customerId){ $customerId = pref_getCustomerIdByEmail($_SESSION['email']); }
 
-$action = $_GET['action'] ?? 'index';
+$action = $_POST['action'] ?? $_GET['action'] ?? '';
 
-function go(string $qs = ''): void {
-  $base = "/SmartCafe/controller/customer/preferenceController.php";
-  header("Location: $base" . ($qs ? ("?" . $qs) : ""));
-  exit();
-}
-
-if ($action === 'index') {
-  $prefs = pref_all_by_customer($customer_id);
-  $msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
-  include(__DIR__ . "/../../view/customer/preferences.php");
-  exit();
-}
-
-if ($action === 'store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  $item  = trim($_POST['item_name'] ?? '');
-  $spice = $_POST['spice_level'] ?? 'medium';
-  $fav   = isset($_POST['is_favorite']) ? 1 : 0;
-  $notes = trim($_POST['notes'] ?? '');
-
-  if ($item === '') go("action=index&msg=" . urlencode("Item name cannot be empty"));
-
-  [$ok, $err] = pref_create($customer_id, $item, $spice, $fav, $notes);
-  go("action=index&msg=" . urlencode($ok ? "Preference added" : ("Failed: $err")));
-}
-
-if ($action === 'edit') {
-  $id   = (int)($_GET['id'] ?? 0);
-  $pref = pref_get($id, $customer_id);
-  if (!$pref) go("action=index&msg=" . urlencode("Not found"));
-  $msg = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
-  include(__DIR__ . "/../../view/customer/preference_edit.php");
-  exit();
-}
-
-if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  $id    = (int)($_POST['id'] ?? 0);
-  $item  = trim($_POST['item_name'] ?? '');
-  $spice = $_POST['spice_level'] ?? 'medium';
-  $fav   = isset($_POST['is_favorite']) ? 1 : 0;
-  $notes = trim($_POST['notes'] ?? '');
-
-  if ($item === '') go("action=edit&id=$id&msg=" . urlencode("Item name cannot be empty"));
-
-  [$ok, $err] = pref_update($id, $customer_id, $item, $spice, $fav, $notes);
-  go("action=index&msg=" . urlencode($ok ? "Preference updated" : ("Failed: $err")));
+if ($action === 'add') {
+    $type = trim($_POST['preference_type'] ?? '');
+    $det  = trim($_POST['details'] ?? '');
+    if ($type === '') {
+        header("Location: /SmartCafe/view/customer/preferences.php?msg=".urlencode("Type required")); exit();
+    }
+    $ok = pref_add($customerId, $type, $det);
+    $m  = $ok ? "Preference added" : "Failed to add";
+    header("Location: /SmartCafe/view/customer/preferences.php?msg=".urlencode($m)); exit();
 }
 
 if ($action === 'delete') {
-  $id = (int)($_GET['id'] ?? 0);
-  $ok = pref_delete($id, $customer_id);
-  go("action=index&msg=" . urlencode($ok ? "Preference deleted" : "Delete failed"));
+    $id = (int)($_GET['id'] ?? 0);
+    $ok = pref_delete($customerId, $id);
+    $m  = $ok ? "Preference removed" : "Failed to remove";
+    header("Location: /SmartCafe/view/customer/preferences.php?msg=".urlencode($m)); exit();
 }
 
-if ($action === 'toggle') {
-  $id = (int)($_GET['id'] ?? 0);
-  $ok = pref_toggle_fav($id, $customer_id);
-  go("action=index&msg=" . urlencode($ok ? "Toggled favorite" : "Action failed"));
+/*  Update handler */
+if ($action === 'update') {
+    $id   = (int)($_POST['pref_id'] ?? 0);
+    $type = trim($_POST['preference_type'] ?? '');
+    $det  = trim($_POST['details'] ?? '');
+    if ($id <= 0 || $type === '') {
+        header("Location: /SmartCafe/view/customer/preferences.php?msg=".urlencode("Invalid input")); exit();
+    }
+    $ok = pref_update($customerId, $id, $type, $det);
+    $m  = $ok ? "Preference updated successfully" : "Failed to update";
+    header("Location: /SmartCafe/view/customer/preferences.php?msg=".urlencode($m)); exit();
 }
 
-go("action=index");
+header("Location: /SmartCafe/view/customer/preferences.php");

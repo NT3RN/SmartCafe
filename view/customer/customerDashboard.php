@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the customer is logged in
+
 if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
     exit();
@@ -22,11 +22,11 @@ if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Cust
     <a href="/SmartCafe/view/customer/menu.php">Menu</a>
     <a href="/SmartCafe/view/customer/cart.php">Cart</a>
     <a href="/SmartCafe/view/customer/orders.php">My Orders</a>
-   
-    <a href="/SmartCafe/controller/customer/preferenceController.php">Preference</a>
+    <a  href="/SmartCafe/view/customer/preferences.php">Preferences</a> <!-- ⬅️ নতুন -->
     <a href="/SmartCafe/view/logout.php">Logout</a>
   </nav>
 </header>
+
 
 <main class="container">
   <h1>Welcome 👋</h1>

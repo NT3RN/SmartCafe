@@ -1,112 +1,129 @@
 <?php
-// Safe defaults if controller didn't set
-if (!isset($prefs) || !is_array($prefs)) { $prefs = []; }
-if (!isset($msg)) { $msg = ''; }
+session_start();
+if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
+    header("Location: /SmartCafe/view/login.php"); exit();
+}
+
+require_once($_SERVER['DOCUMENT_ROOT']."/SmartCafe/model/customer/preferenceModel.php");
+
+$customerId = $_SESSION['customer_id'] ?? 0;
+if (!$customerId){ $customerId = pref_getCustomerIdByEmail($_SESSION['email']); }
+
+$prefs = pref_all($customerId);
+$msg   = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
 ?>
 <!doctype html>
-<html lang="bn">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Meal Preferences — SmartCafe</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/SmartCafe/view/css/site.css">
+  <title>Preferences - SmartCafe</title>
+  <link rel="icon" href="/SmartCafe/assets/logo.png">
+  <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
 </head>
 <body>
 
-<header class="navbar" id="navbar">
-  <div class="nav-wrap">
-    <a class="brand" href="/SmartCafe/index.php"><img src="/SmartCafe/assets/logo.png" alt="SmartCafe" class="logo"><span>SmartCafe</span></a>
-    <nav class="links">
-      <a class="btn" href="/SmartCafe/view/customer/dashboard.php">Dashboard</a>
-      <a href="/SmartCafe/view/customer/menu.php">Menu</a>
-      <a href="/SmartCafe/view/customer/orders.php">My Orders</a>
-      <a class="btn" href="/SmartCafe/view/logout.php">Logout</a>
-    </nav>
-  </div>
+<header class="topbar">
+  <div class="brand">SmartCafe</div>
+  <nav>
+    <a href="/SmartCafe/view/customer/customerDashboard.php">Dashboard</a>
+    <a href="/SmartCafe/view/customer/menu.php">Menu</a>
+    <a href="/SmartCafe/view/customer/cart.php">Cart</a>
+    <a href="/SmartCafe/view/customer/orders.php">My Orders</a>
+    <a class="active" href="/SmartCafe/view/customer/preferences.php">Preferences</a>
+    <a href="/SmartCafe/view/logout.php">Logout</a>
+  </nav>
 </header>
 
 <main class="container">
-  <?php if (!empty($msg)): ?>
-    <div class="card"><div class="card-body"><p><?php echo htmlspecialchars($msg); ?></p></div></div>
-  <?php endif; ?>
-
-  <h2 class="section-title">Meal Preference — Actions</h2>
+  <h1>Meal Preferences</h1>
+  <?php if ($msg): ?><div class="alert"><?php echo $msg; ?></div><?php endif; ?>
 
   <div class="grid">
-    <!-- ADD -->
-    <div class="card">
-      <div class="card-body">
-        <h3 id="add">Add Preference</h3>
-        <form method="post" action="/SmartCafe/controller/customer/preferenceController.php?action=store">
-          <label for="item_name">Item name</label>
-          <input id="item_name" type="text" name="item_name" placeholder="e.g., Cappuccino" required>
 
-          <label for="spice_level">Spice level</label>
-          <select id="spice_level" name="spice_level">
-            <option value="mild">Mild</option>
-            <option value="medium" selected>Medium</option>
-            <option value="hot">Hot</option>
-          </select>
-
-          <label style="display:block;margin:8px 0;">
-            <input type="checkbox" name="is_favorite"> Mark as favorite
-          </label>
-
-          <label for="notes">Notes</label>
-          <input id="notes" type="text" name="notes" placeholder="No sugar / Oat milk">
-
-          <button class="btn" type="submit">Save</button>
-        </form>
-      </div>
+    <!-- Add new -->
+    <div class="card" style="padding:16px;">
+      <h3>Add Preference</h3>
+      <form method="post" action="/SmartCafe/controller/customer/preferenceController.php">
+        <input type="hidden" name="action" value="add">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input type="text" name="preference_type" placeholder="Type (e.g., Spicy, Vegan)" required
+                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;">
+          <input type="text" name="details" placeholder="Details (optional)"
+                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;">
+          <button class="btn" type="submit">Add</button>
+        </div>
+      </form>
     </div>
 
-    <!-- LIST + ACTIONS -->
-    <div class="card" style="grid-column: span 2;">
-      <div class="card-body">
-        <h3>Your Preferences</h3>
-
-        <?php if (empty($prefs)): ?>
-          <p class="muted">No preferences found.</p>
-        <?php else: ?>
-          <table style="width:100%;border-collapse:collapse">
-            <thead>
-              <tr>
-                <th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Item</th>
-                <th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Spice</th>
-                <th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Fav</th>
-                <th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Notes</th>
-                <th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($prefs as $p): ?>
-                <tr>
-                  <td style="padding:8px;border-bottom:1px solid #f1f1f1;"><?php echo htmlspecialchars($p['item_name'] ?? ''); ?></td>
-                  <td style="padding:8px;border-bottom:1px solid #f1f1f1;"><?php echo htmlspecialchars($p['spice_level'] ?? ''); ?></td>
-                  <td style="padding:8px;border-bottom:1px solid #f1f1f1;"><?php echo !empty($p['is_favorite']) ? '★' : '—'; ?></td>
-                  <td style="padding:8px;border-bottom:1px solid #f1f1f1;"><?php echo htmlspecialchars($p['notes'] ?? ''); ?></td>
-                  <td style="padding:8px;border-bottom:1px solid #f1f1f1;">
-                    <a class="btn" href="/SmartCafe/controller/customer/preferenceController.php?action=toggle&id=<?php echo (int)$p['id']; ?>">Fav</a>
-                    <a class="btn" href="/SmartCafe/controller/customer/preferenceController.php?action=edit&id=<?php echo (int)$p['id']; ?>">Edit</a>
-                    <a class="btn" href="/SmartCafe/controller/customer/preferenceController.php?action=delete&id=<?php echo (int)$p['id']; ?>" onclick="return confirm('Delete this preference?')">Delete</a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
-      </div>
+    <!-- List -->
+    <div class="card" style="padding:16px;">
+      <h3>Saved Preferences</h3>
+      <?php if (empty($prefs)): ?>
+        <p class="muted">No preferences saved yet.</p>
+      <?php else: ?>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Details</th>
+              <th>Created</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php $i=1; foreach($prefs as $p): ?>
+            <tr>
+              <td><?php echo $i++; ?></td>
+              <td><?php echo htmlspecialchars($p['preference_type']); ?></td>
+              <td><?php echo htmlspecialchars($p['details'] ?? ''); ?></td>
+              <td><?php echo htmlspecialchars($p['created_at'] ?? ''); ?></td>
+              <td>
+                <a class="btn sm" href="javascript:void(0)"
+                   onclick="editPref(<?php echo $p['preference_id']; ?>,'<?php echo htmlspecialchars($p['preference_type']); ?>','<?php echo htmlspecialchars($p['details']); ?>')">Edit</a>
+                <a class="btn danger sm"
+                   href="/SmartCafe/controller/customer/preferenceController.php?action=delete&id=<?php echo (int)$p['preference_id']; ?>"
+                   onclick="return confirm('Delete this preference?');">Delete</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      <?php endif; ?>
     </div>
+
+    <!-- Edit form -->
+    <div id="editBox" class="card" style="padding:16px;display:none;">
+      <h3>Edit Preference</h3>
+      <form method="post" action="/SmartCafe/controller/customer/preferenceController.php">
+        <input type="hidden" name="action" value="update">
+        <input type="hidden" name="pref_id" id="edit_id">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input type="text" id="edit_type" name="preference_type" placeholder="Type" required
+                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:240px;">
+          <input type="text" id="edit_details" name="details" placeholder="Details"
+                 style="padding:10px;border:1px solid #ccc;border-radius:10px;min-width:280px;">
+          <button class="btn" type="submit">Update</button>
+          <button class="btn outline" type="button" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
   </div>
 </main>
 
-<footer class="footer">
-  <div class="foot-inner">
-    <div>© SmartCafe</div>
-    <div class="foot-links"><a href="#">Privacy</a><a href="#">Terms</a></div>
-  </div>
-</footer>
+<script>
+function editPref(id, type, details){
+  document.getElementById('editBox').style.display = 'block';
+  document.getElementById('edit_id').value = id;
+  document.getElementById('edit_type').value = type;
+  document.getElementById('edit_details').value = details;
+  window.scrollTo({ top: document.getElementById('editBox').offsetTop - 50, behavior: 'smooth' });
+}
+function cancelEdit(){
+  document.getElementById('editBox').style.display = 'none';
+}
+</script>
 
 </body>
 </html>
- 

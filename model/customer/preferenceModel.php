@@ -1,75 +1,76 @@
 <?php
 require_once(__DIR__ . "/../dbConnect.php");
 
-function pref_all_by_customer(int $customer_id): array {
-  $conn = getConnect();
-  $stm = $conn->prepare(
-    "SELECT * FROM CustomerPreferences
-     WHERE customer_id=? ORDER BY is_favorite DESC, item_name ASC"
-  );
-  $stm->bind_param("i", $customer_id);
-  $stm->execute();
-  $rows = $stm->get_result()->fetch_all(MYSQLI_ASSOC);
-  $stm->close(); $conn->close();
-  return $rows;
+/* ইমেইল থেকে customer_id বের করা */
+function pref_getCustomerIdByEmail($email){
+    $conn = getConnect();
+    $sql  = "SELECT c.customer_id 
+             FROM Users u 
+             JOIN Customers c ON c.customer_id = u.user_id 
+             WHERE u.email = ? LIMIT 1";
+    $st = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($st, "s", $email);
+    mysqli_stmt_execute($st);
+    mysqli_stmt_bind_result($st, $cid);
+    $cidVal = 0;
+    if (mysqli_stmt_fetch($st)) $cidVal = (int)$cid;
+    mysqli_stmt_close($st);
+    mysqli_close($conn);
+    return $cidVal;
 }
 
-function pref_get(int $id, int $customer_id): ?array {
-  $conn = getConnect();
-  $stm = $conn->prepare(
-    "SELECT * FROM CustomerPreferences WHERE id=? AND customer_id=?"
-  );
-  $stm->bind_param("ii", $id, $customer_id);
-  $stm->execute();
-  $row = $stm->get_result()->fetch_assoc();
-  $stm->close(); $conn->close();
-  return $row ?: null;
+/* সব preference */
+function pref_all($customerId){
+    $conn = getConnect();
+    $sql  = "SELECT preference_id, preference_type, details, created_at
+             FROM MealPreferences WHERE customer_id = ? ORDER BY preference_id DESC";
+    $st = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($st, "i", $customerId);
+    mysqli_stmt_execute($st);
+    $res = mysqli_stmt_get_result($st);
+    $rows = [];
+    while($r = mysqli_fetch_assoc($res)) $rows[] = $r;
+    mysqli_stmt_close($st);
+    mysqli_close($conn);
+    return $rows;
 }
 
-function pref_create(int $customer_id, string $item_name, string $spice_level, int $is_favorite, ?string $notes): array {
-  $conn = getConnect();
-  $stm = $conn->prepare(
-    "INSERT INTO CustomerPreferences(customer_id,item_name,spice_level,is_favorite,notes)
-     VALUES(?,?,?,?,?)"
-  );
-  $stm->bind_param("issis", $customer_id, $item_name, $spice_level, $is_favorite, $notes);
-  $ok = $stm->execute();
-  $err = $stm->error;
-  $stm->close(); $conn->close();
-  return [$ok, $err];
+/* Add new preference */
+function pref_add($customerId, $type, $details){
+    $conn = getConnect();
+    $sql  = "INSERT INTO MealPreferences (customer_id, preference_type, details)
+             VALUES (?,?,?)";
+    $st = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($st, "iss", $customerId, $type, $details);
+    $ok = mysqli_stmt_execute($st);
+    mysqli_stmt_close($st);
+    mysqli_close($conn);
+    return $ok;
 }
 
-function pref_update(int $id, int $customer_id, string $item_name, string $spice_level, int $is_favorite, ?string $notes): array {
-  $conn = getConnect();
-  $stm = $conn->prepare(
-    "UPDATE CustomerPreferences
-     SET item_name=?, spice_level=?, is_favorite=?, notes=?
-     WHERE id=? AND customer_id=?"
-  );
-  $stm->bind_param("ssissi", $item_name, $spice_level, $is_favorite, $notes, $id, $customer_id);
-  $ok = $stm->execute();
-  $err = $stm->error;
-  $stm->close(); $conn->close();
-  return [$ok, $err];
+/* Delete preference */
+function pref_delete($customerId, $prefId){
+    $conn = getConnect();
+    $sql  = "DELETE FROM MealPreferences 
+             WHERE preference_id = ? AND customer_id = ?";
+    $st = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($st, "ii", $prefId, $customerId);
+    $ok = mysqli_stmt_execute($st);
+    mysqli_stmt_close($st);
+    mysqli_close($conn);
+    return $ok;
 }
 
-function pref_delete(int $id, int $customer_id): bool {
-  $conn = getConnect();
-  $stm = $conn->prepare("DELETE FROM CustomerPreferences WHERE id=? AND customer_id=?");
-  $stm->bind_param("ii", $id, $customer_id);
-  $ok = $stm->execute();
-  $stm->close(); $conn->close();
-  return $ok;
-}
-
-function pref_toggle_fav(int $id, int $customer_id): bool {
-  $conn = getConnect();
-  $stm = $conn->prepare(
-    "UPDATE CustomerPreferences SET is_favorite = 1 - is_favorite WHERE id=? AND customer_id=?"
-  );
-  $stm->bind_param("ii", $id, $customer_id);
-  $stm->execute();
-  $ok = $stm->affected_rows > 0;
-  $stm->close(); $conn->close();
-  return $ok;
+/*  Update preference */
+function pref_update($customerId, $prefId, $type, $details){
+    $conn = getConnect();
+    $sql  = "UPDATE MealPreferences
+             SET preference_type = ?, details = ?
+             WHERE preference_id = ? AND customer_id = ?";
+    $st = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($st, "ssii", $type, $details, $prefId, $customerId);
+    $ok = mysqli_stmt_execute($st);
+    mysqli_stmt_close($st);
+    mysqli_close($conn);
+    return $ok;
 }
