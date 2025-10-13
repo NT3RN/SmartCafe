@@ -19,10 +19,10 @@
                 <small class="classDanger" id="loginErr" style="color: red;">
                     <?php
                     if (isset($_GET["loginErr"])) {
-                        echo htmlspecialchars($_GET["loginErr"]);
+                        echo $_GET["loginErr"];
                     }
                     if (isset($_GET["invalidUser"])) {
-                        echo htmlspecialchars($_GET["invalidUser"]);
+                        echo $_GET["invalidUser"];
                     }
                     ?>
                 </small>
@@ -33,7 +33,7 @@
                 <span id="emailErr" style="color: red;">
                     <?php
                     if (isset($_GET["emailErr"])) {
-                        echo htmlspecialchars($_GET["emailErr"]);
+                        echo $_GET["emailErr"];
                     }
                     ?>
                 </span>
@@ -44,7 +44,7 @@
                 <span id="passErr" style="color: red;">
                     <?php
                     if (isset($_GET["passErr"])) {
-                        echo htmlspecialchars($_GET["passErr"]);
+                        echo $_GET["passErr"];
                     }
                     ?>
                 </span>
