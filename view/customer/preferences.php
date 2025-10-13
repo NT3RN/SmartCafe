@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-/*  Require customer login (no inline exit)
- */
+/*  Require customer login */
 $isLogged = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLogged || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -11,13 +10,11 @@ if (!$isLogged || $_SESSION["role"] !== "Customer") {
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/preferenceModel.php");
 
-/*  Derive $customerId without ??
- */
+/*  Derive $customerId */
 $customerId = 0;
 if (isset($_SESSION['customer_id'])) {
     $customerId = $_SESSION['customer_id'];
 }
-
 if (!$customerId) {
     $emailForLookup = '';
     if (isset($_SESSION['email'])) {
@@ -26,12 +23,10 @@ if (!$customerId) {
     $customerId = pref_getCustomerIdByEmail($emailForLookup);
 }
 
-/*  Load preferences
- */
+/*  Load preferences */
 $prefs = pref_all($customerId);
 
-/*  Optional message (no ?:)
- */
+/*  Optional message */
 $msg = '';
 if (isset($_GET['msg'])) {
     $msg = htmlspecialchars($_GET['msg']);
@@ -145,7 +140,8 @@ if (isset($_GET['msg'])) {
               <td><?php echo $typeEsc; ?></td>
               <td><?php echo $detailsEsc; ?></td>
               <td><?php echo $createdEsc; ?></td>
-              <td>
+              <!-- ✅ Flex gap সহ action cell -->
+              <td style="display:flex; gap:8px; flex-wrap:wrap;">
                 <a
                   class="btn sm"
                   href="javascript:void(0)"

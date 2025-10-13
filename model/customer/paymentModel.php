@@ -1,13 +1,7 @@
 <?php
 require_once(__DIR__ . "/../dbConnect.php");
 
-/* ফাংশন (FUNCTION): createPayment
-উদ্দেশ্য (PURPOSE): নির্দিষ্ট একটি অর্ডার-এর জন্য পেমেন্ট রেকর্ড সংরক্ষণ করা।
-প্যারামিটারসমূহ (PARAMS):
-$order_id : যে অর্ডারের পেমেন্ট দেওয়া হচ্ছে তার আইডি
-$amount : মোট প্রদেয় অর্থের পরিমাণ
-$method : পেমেন্ট পদ্ধতি (যেমন — Cash, Card, অথবা MobilePayment)
-ফলাফল (RETURNS): সফলভাবে সংরক্ষণ হলে true, ব্যর্থ হলে false রিটার্ন করবে। */
+
 
 function createPayment($order_id, $amount, $method) {
     // Convert and validate types

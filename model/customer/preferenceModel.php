@@ -1,13 +1,6 @@
 <?php
 require_once(__DIR__ . "/../dbConnect.php");
 
-/*  FUNCTION: pref_getCustomerIdByEmail
-   PURPOSE : ইমেইল থেকে কাস্টমারের আইডি (customer_id) বের করা
-   PARAMS  : 
-       $email (string) → কাস্টমারের ইমেইল ঠিকানা
-   RETURNS : 
-       integer customer_id → পাওয়া গেলে কাস্টমারের আইডি রিটার্ন করে, 
-                             না পেলে 0 রিটার্ন করে */
 function pref_getCustomerIdByEmail($email) {
     $conn = getConnect();
 
@@ -45,12 +38,7 @@ function pref_getCustomerIdByEmail($email) {
     }
 }
 
-/*  FUNCTION: pref_all
-   PURPOSE : নির্দিষ্ট কাস্টমারের সব প্রেফারেন্স (পছন্দসমূহ) সংগ্রহ করা
-   PARAMS  : 
-       $customerId (int) → কাস্টমারের আইডি
-   RETURNS : 
-       array of preferences → কাস্টমারের সব প্রেফারেন্সের একটি অ্যারে রিটার্ন করে */
+
 
 function pref_all($customerId) {
     $conn = getConnect();
@@ -92,14 +80,6 @@ function pref_all($customerId) {
     }
 }
 
-/*   FUNCTION: pref_add
-   PURPOSE : একটি নতুন প্রেফারেন্স (পছন্দ) রো বা রেকর্ড যোগ করা
-   PARAMS  : 
-       $customerId (int) → কাস্টমারের আইডি
-       $type (string)    → প্রেফারেন্সের ধরন (যেমন Spicy, Vegan ইত্যাদি)
-       $details (string) → প্রেফারেন্সের অতিরিক্ত বিবরণ
-   RETURNS : 
-       boolean success   → সফলভাবে যোগ হলে true, ব্যর্থ হলে false রিটার্ন করে */
 
 function pref_add($customerId, $type, $details) {
     $conn = getConnect();
@@ -133,13 +113,6 @@ function pref_add($customerId, $type, $details) {
     }
 }
 
-/*  FUNCTION: pref_delete
-   PURPOSE : নির্দিষ্ট কাস্টমারের একটি প্রেফারেন্স (পছন্দ) রো বা রেকর্ড মুছে ফেলা
-   PARAMS  : 
-   $customerId (int) → কাস্টমারের আইডি
-   $prefId (int)     → প্রেফারেন্সের আইডি
-   RETURNS : 
-       boolean success   → সফলভাবে মুছে ফেললে true, ব্যর্থ হলে false রিটার্ন করে */
 
 function pref_delete($customerId, $prefId) {
     $conn = getConnect();
@@ -173,15 +146,6 @@ function pref_delete($customerId, $prefId) {
     }
 }
 
-/*  FUNCTION: pref_update
-   PURPOSE : নির্দিষ্ট কাস্টমারের একটি প্রেফারেন্স (পছন্দ) রো বা রেকর্ড আপডেট করা
-   PARAMS  : 
-       $customerId (int)   → কাস্টমারের আইডি
-       $prefId (int)       → প্রেফারেন্সের আইডি
-       $type (string)      → প্রেফারেন্সের ধরন (যেমন Spicy, Vegan ইত্যাদি)
-       $details (string)   → প্রেফারেন্সের অতিরিক্ত বিবরণ
-   RETURNS : 
-       boolean success     → কাজ সফল হলে true, ব্যর্থ হলে false রিটার্ন করে */
 
 function pref_update($customerId, $prefId, $type, $details) {
     $conn = getConnect();
