@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-/* Session flags and computed links (no ?:)
- */
 $isLogged = (isset($_SESSION['email']) && isset($_SESSION['role']));
 
 $menuOrLogin = '';
@@ -12,7 +10,6 @@ if ($isLogged) {
     $menuOrLogin = '/SmartCafe/view/login.php';
 }
 
-/* Footer label that was using a ternary */
 $footerMenuOrLoginLabel = '';
 if ($isLogged) {
     $footerMenuOrLoginLabel = 'Menu';
@@ -38,7 +35,7 @@ if ($isLogged) {
       <span>SmartCafe</span>
     </a>
     <nav class="links">
-      <!-- আগের #menu ছিল; এখন সরাসরি Menu বা Login -->
+     
       <a href="<?php echo $menuOrLogin; ?>">Menu</a>
       <a href="#locations">Locations</a>
       <a href="#about">About</a>
@@ -57,7 +54,7 @@ if ($isLogged) {
     <h1 class="reveal">Freshly Brewed.<br>Lovingly Crafted.</h1>
     <p class="reveal delay-1">Signature blends, artisan pastries, and your daily dose of joy.</p>
     <div class="cta-row reveal delay-2">
-      <!-- Explore Menu এখন সরাসরি customer menu বা login -->
+     
       <a class="btn lg" href="<?php echo $menuOrLogin; ?>">Explore Menu</a>
       <a class="btn ghost" href="#about">Learn More</a>
     </div>
@@ -68,7 +65,6 @@ if ($isLogged) {
 <section id="menu" class="container">
   <h2 class="section-title reveal">Popular Picks</h2>
 
-  <!-- শুধু ছবি/টেক্সট—কোনো Add to Cart/লিংক নেই -->
   <div class="grid">
     <article class="card pop">
       <img class="thumb" src="/SmartCafe/assets/cappuccino.jpg" alt="Cappuccino">
@@ -147,7 +143,7 @@ if ($isLogged) {
     <div class="foot-links">
       <a href="#about">About</a>
       <a href="#locations">Locations</a>
-      <!-- Footer-এও একই লজিক -->
+    
       <a href="<?php echo $menuOrLogin; ?>">
         <?php echo $footerMenuOrLoginLabel; ?>
       </a>

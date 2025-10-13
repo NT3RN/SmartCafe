@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-/*  Require customer login */
+
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -11,8 +11,7 @@ if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/orderModel.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
 
-/*  Fetch customer_id from Users
- */
+
 $conn = getConnect();
 
 $email = '';
@@ -38,8 +37,7 @@ if (!is_array($row) || !isset($row['user_id'])) {
 
 $customer_id = (int)$row['user_id'];
 
-/*  Handle actions
- */
+
 $action = '';
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -64,7 +62,6 @@ if ($action === 'cancel') {
     exit();
 }
 
-/*  Default redirect
- */
+
 header("Location: /SmartCafe/view/customer/orders.php");
 exit();

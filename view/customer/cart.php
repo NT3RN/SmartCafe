@@ -1,18 +1,12 @@
 <?php
 session_start();
 
-/* 
-   1) AUTH GUARD (Customer only)
-   */
 $loggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$loggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
     exit();
 }
 
-/* 
-   2) CART SETUP
-    */
 $cart = [];
 if (isset($_SESSION["cart"])) {
     $cart = $_SESSION["cart"];
@@ -31,9 +25,6 @@ foreach ($cart as $c) {
     $sum += ($price * $qty);
 }
 
-/* 
-   3) FLASH/QUERY MESSAGE (safe)
-    */
 $msg = '';
 if (isset($_GET['msg'])) {
     $msg = htmlspecialchars($_GET['msg']);
@@ -87,7 +78,7 @@ if (isset($_GET['msg'])) {
           <?php 
           $index = 0;
           foreach ($cart as $i => $c): 
-              // Ensure fields exist and types are correct
+           
               $name = '';
               if (isset($c['name'])) {
                   $name = htmlspecialchars($c['name']);

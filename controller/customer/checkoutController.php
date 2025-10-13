@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-/*  Require customer login
- */
+
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -14,8 +13,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/orderModel.p
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/paymentModel.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
 
-/*  Cart guard
- */
+
 $cart = array();
 if (isset($_SESSION["cart"])) {
     $cart = $_SESSION["cart"];
@@ -28,16 +26,12 @@ if ($isCartEmpty) {
     exit();
 }
 
-/*  Handle payment submit
- */
+
 $isPost = ($_SERVER["REQUEST_METHOD"] === "POST");
 $hasPayNow = (isset($_POST["pay_now"]));
 
 if ($isPost && $hasPayNow) {
 
-    /* 
-       Re-validate items (availability + latest price)
-        */
     $validated = array();
     $total = 0.0;
 
@@ -86,9 +80,7 @@ if ($isPost && $hasPayNow) {
         exit();
     }
 
-    /* 
-       Map UI method → enum ('Card|'MobilePayment'|'Cash')
-        */
+    
     $ui = '';
     if (isset($_POST['payment_method'])) {
         $ui = $_POST['payment_method'];
@@ -111,9 +103,7 @@ if ($isPost && $hasPayNow) {
         }
     }
 
-    /*
-       Find customer_id from Users
-   */
+    
     $conn = getConnect();
 
     $email = '';
@@ -139,9 +129,6 @@ if ($isPost && $hasPayNow) {
 
     $customer_id = (int)$row['user_id'];
 
-    /* 
-       1) Create order + items
-       */
     $order_id = createOrderWithItems($customer_id, $validated);
     if (!$order_id) {
         $msg = urlencode("Failed to place order.");
@@ -149,9 +136,7 @@ if ($isPost && $hasPayNow) {
         exit();
     }
 
-    /* 
-       2) Create payment
-      */
+   
     $ok = createPayment($order_id, $total, $methodEnum);
 
     if ($ok) {
@@ -166,7 +151,6 @@ if ($isPost && $hasPayNow) {
     }
 }
 
-/*  Fallback (no POST payment submit)
- */
+
 header("Location: /SmartCafe/view/customer/checkout.php");
 exit();

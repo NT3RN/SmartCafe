@@ -1,18 +1,12 @@
 <?php
 session_start();
 
-/* 
-   1) AUTH GUARD (Customer only)
-  */
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
     exit();
 }
 
-/* 
-   2) FETCH CUSTOMER ID FROM DB
-    */
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
 $conn = getConnect();
 
@@ -31,8 +25,6 @@ if ($res) {
 }
 
 mysqli_close($conn);
-
-// If no matching user row, force re-login
 if (!is_array($row) || !isset($row['user_id'])) {
     header("Location: /SmartCafe/view/login.php");
     exit();
@@ -40,15 +32,9 @@ if (!is_array($row) || !isset($row['user_id'])) {
 
 $customer_id = (int)$row['user_id'];
 
-/* 
-   3) FETCH ORDERS FOR CUSTOMER
-   */
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/orderModel.php");
 $orders = getOrdersByCustomer($customer_id);
 
-/* 
-   4) OPTIONAL FLASH MESSAGE
-    */
 $msg = '';
 if (isset($_GET['msg'])) {
     $msg = htmlspecialchars($_GET['msg']);

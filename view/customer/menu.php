@@ -1,26 +1,17 @@
 <?php
 session_start();
 
-/* 
-   1) AUTH GUARD (Customer only)
-   */
+
 $loggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$loggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
     exit();
 }
 
-/* 
-   2) LOAD MODEL + FETCH DB ITEMS
-   */
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/itemModel.php");
 
-/* @var array $dbItems */
 $dbItems = getActiveMenuItems();
 
-/*
-   3) DEFAULT ITEMS (shown if DB empty; also used for merge)
-    */
 $defaultItems = [
     ['menu_item_id' => -101, 'name' => 'Pizza',        'description' => 'Cheesy pizza slice',    'price' => 150, 'image_url' => 'pizza.jpg'],
     ['menu_item_id' => -102, 'name' => 'Burger',       'description' => 'Juicy beef burger',     'price' => 180, 'image_url' => 'burger.jpg'],
@@ -32,9 +23,6 @@ $defaultItems = [
     ['menu_item_id' => -108, 'name' => 'Vegetable',    'description' => 'Mixed veg bowl',        'price' => 110, 'image_url' => 'vegetable.jpg'],
 ];
 
-/* 
-   4) HELPER: normalize string (for name-based merge)
-    */
 function normalizeString($value) {
     if (!isset($value)) {
         return '';
@@ -44,31 +32,22 @@ function normalizeString($value) {
     return $lower;
 }
 
-/* 
-   5) MERGE: DB overrides Default by normalized name
-    */
 $byName = [];
 
-// Seed with defaults first
 for ($i = 0; $i < count($defaultItems); $i++) {
     $d = $defaultItems[$i];
     $key = normalizeString(isset($d['name']) ? $d['name'] : '');
     $byName[$key] = $d;
 }
 
-// Override with DB items if names match; or add new if not present
 for ($j = 0; $j < count($dbItems); $j++) {
     $it = $dbItems[$j];
     $key = normalizeString(isset($it['name']) ? $it['name'] : '');
-    $byName[$key] = $it; // DB wins
+    $byName[$key] = $it; 
 }
 
-// Flatten to a simple indexed array
 $items = array_values($byName);
 
-/* 
-   6) FLASH / QUERY MESSAGE (safe)
-    */
 $msg = '';
 if (isset($_GET['msg'])) {
     $msg = htmlspecialchars($_GET['msg']);
@@ -102,18 +81,17 @@ if (isset($_GET['msg'])) {
 
   <div class="grid">
     <?php
-    // Render each item card
+    
     for ($k = 0; $k < count($items); $k++):
         $it = $items[$k];
 
-        // ID & default flag
         $id = 0;
         if (isset($it['menu_item_id'])) {
             $id = (int)$it['menu_item_id'];
         }
         $isDefault = ($id <= 0);
 
-        //  Image path (fallback to placeholder if empty)
+        
         $rawImg = '';
         if (isset($it['image_url'])) {
             $rawImg = $it['image_url'];
@@ -123,18 +101,15 @@ if (isset($_GET['msg'])) {
         }
         $img = htmlspecialchars($rawImg);
 
-        //  Name (required for display)
         $rawName = isset($it['name']) ? $it['name'] : '';
         $name = htmlspecialchars($rawName);
 
-        //  Description (optional)
         $rawDesc = '';
         if (isset($it['description'])) {
             $rawDesc = $it['description'];
         }
         $desc = htmlspecialchars($rawDesc);
 
-        //  Price
         $priceVal = 0.0;
         if (isset($it['price'])) {
             $priceVal = (float)$it['price'];
@@ -159,13 +134,13 @@ if (isset($_GET['msg'])) {
           <div class="row-between">
             <span class="price">৳ <?php echo $priceTxt; ?></span>
             <span class="badge"><?php echo $isDefault ? 'New' : 'Existing'; ?></span>
-            <!-- Add to Cart Form -->
+            
             <form method="post" action="/SmartCafe/controller/customer/cartController.php">
               <input type="hidden" name="action" value="add">
               <input type="hidden" name="menu_item_id" value="<?php echo $id; ?>">
 
               <?php if ($isDefault): ?>
-                <!-- Default item (not in DB): send name & price for cart -->
+                
                 <input type="hidden" name="name"  value="<?php echo $name; ?>">
                 <input type="hidden" name="price" value="<?php echo $priceVal; ?>">
               <?php endif; ?>

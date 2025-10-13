@@ -3,7 +3,9 @@ require_once('../../model/dbConnect.php');
 
 function getMenuItems() {
     $conn = getConnect();
-    $sql = "SELECT menu_item_id, name, description, price_cents FROM menuitems ORDER BY created_at DESC";
+    $sql = "SELECT menu_item_id, name, description, price, image_url, available, created_at 
+            FROM menuitems 
+            ORDER BY created_at DESC";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
@@ -16,11 +18,13 @@ function getMenuItems() {
     return $items;
 }
 
-function addMenuItem($name, $description, $price_cents) {
+function addMenuItem($name, $description, $price, $image_url = null, $available = 1) {
     $conn = getConnect();
-    $sql = "INSERT INTO menuitems (name, description, price_cents, created_at) VALUES (?, ?, ?, NOW())";
+    $sql = "INSERT INTO menuitems (name, description, price, image_url, available, created_at) 
+            VALUES (?, ?, ?, ?, ?, NOW())";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssi", $name, $description, $price_cents);
+    // “d” for decimal/double, “s” for string, “i” for integer
+    mysqli_stmt_bind_param($stmt, "ssdsi", $name, $description, $price, $image_url, $available);
     $ok = mysqli_stmt_execute($stmt);
     $menu_item_id = $ok ? mysqli_insert_id($conn) : null;
     mysqli_stmt_close($stmt);
@@ -33,7 +37,7 @@ function updateMenuItem($id, $fields) {
     $set = [];
     $types = '';
     $vals = [];
-    
+
     if (isset($fields['name'])) {
         $set[] = 'name = ?';
         $types .= 's';
@@ -44,10 +48,20 @@ function updateMenuItem($id, $fields) {
         $types .= 's';
         $vals[] = $fields['description'];
     }
-    if (isset($fields['price_cents'])) {
-        $set[] = 'price_cents = ?';
+    if (isset($fields['price'])) {
+        $set[] = 'price = ?';
+        $types .= 'd';
+        $vals[] = $fields['price'];
+    }
+    if (isset($fields['image_url'])) {
+        $set[] = 'image_url = ?';
+        $types .= 's';
+        $vals[] = $fields['image_url'];
+    }
+    if (isset($fields['available'])) {
+        $set[] = 'available = ?';
         $types .= 'i';
-        $vals[] = $fields['price_cents'];
+        $vals[] = $fields['available'];
     }
 
     if (empty($set)) {
@@ -56,7 +70,8 @@ function updateMenuItem($id, $fields) {
 
     $sql = "UPDATE menuitems SET " . implode(", ", $set) . " WHERE menu_item_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, $types . 'i', ...$vals, $id);
+    // Append type and value for the WHERE id
+    mysqli_stmt_bind_param($stmt, $types . 'i', ...array_merge($vals, [$id]));
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
@@ -73,4 +88,6 @@ function deleteMenuItem($id) {
     mysqli_close($conn);
     return $ok;
 }
+
+
 ?>

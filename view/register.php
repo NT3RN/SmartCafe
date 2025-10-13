@@ -6,9 +6,7 @@
 </head>
 <body>
 <?php
-// ==============================
-// Precompute safe values (no ?:)
-// ==============================
+
 $formErr   = '';
 $nameErr   = '';
 $emailErr  = '';
@@ -35,7 +33,6 @@ if (isset($_GET['email']))    { $emailVal    = htmlspecialchars($_GET['email']);
 if (isset($_GET['sq']))       { $selectedSQ  = $_GET['sq']; }
 if (isset($_GET['sa']))       { $saVal       = htmlspecialchars($_GET['sa']); }
 
-// Security questions list
 $questions = array(
     "What is your mother’s maiden name?",
     "What was the name of your first pet?",

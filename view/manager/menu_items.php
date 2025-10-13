@@ -7,9 +7,19 @@ foreach ($menu_items as $item) {
     echo '<div>';
     echo '<h3 class="font-semibold">' . htmlspecialchars($item['name']) . '</h3>';
     echo '<p class="text-sm text-gray-500">' . htmlspecialchars($item['description']) . '</p>';
-    echo '<p class="text-lg font-semibold">' . number_format($item['price_cents'] / 100, 2) . '$</p>';
+    // Use price (decimal) directly. No need to divide by 100.
+    echo '<p class="text-lg font-semibold">' . number_format($item['price'], 2) . '$</p>';
     echo '</div>';
     echo '<button class="btn btn-secondary" onclick="editMenuItem(' . $item['menu_item_id'] . ')">Edit</button>';
     echo '</div>';
 }
+
 ?>
+<script>
+function editMenuItem(id) {
+    // e.g. open modal, redirect, or do AJAX
+    console.log("editMenuItem clicked, id:", id);
+    // example redirection
+    window.location.href = "/manager/edit_menu_item.php?id=" + id;
+}
+</script>
