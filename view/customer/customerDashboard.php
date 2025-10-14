@@ -4,13 +4,11 @@ session_start();
 
 if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
-    exit();
 }
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
   <title>Customer Dashboard - SmartCafe</title>
   <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
 </head>

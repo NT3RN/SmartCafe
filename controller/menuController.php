@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../model/manager/menuModel.php');
+require_once('../model/menuModel.php');
 
 if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
     header('Location: /login.php');

@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-/*  Require customer login */
 $isLogged = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLogged || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -10,7 +9,6 @@ if (!$isLogged || $_SESSION["role"] !== "Customer") {
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/preferenceModel.php");
 
-/*  Derive $customerId */
 $customerId = 0;
 if (isset($_SESSION['customer_id'])) {
     $customerId = $_SESSION['customer_id'];
@@ -23,10 +21,8 @@ if (!$customerId) {
     $customerId = pref_getCustomerIdByEmail($emailForLookup);
 }
 
-/*  Load preferences */
 $prefs = pref_all($customerId);
 
-/*  Optional message */
 $msg = '';
 if (isset($_GET['msg'])) {
     $msg = htmlspecialchars($_GET['msg']);
@@ -35,7 +31,6 @@ if (isset($_GET['msg'])) {
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
   <title>Preferences - SmartCafe</title>
   <link rel="icon" href="/SmartCafe/assets/logo.png">
   <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
@@ -63,7 +58,6 @@ if (isset($_GET['msg'])) {
 
   <div class="grid">
 
-    <!-- Add new -->
     <div class="card" style="padding:16px;">
       <h3>Add Preference</h3>
       <form method="post" action="/SmartCafe/controller/customer/preferenceController.php">
@@ -87,7 +81,6 @@ if (isset($_GET['msg'])) {
       </form>
     </div>
 
-    <!-- List -->
     <div class="card" style="padding:16px;">
       <h3>Saved Preferences</h3>
       <?php
@@ -140,7 +133,7 @@ if (isset($_GET['msg'])) {
               <td><?php echo $typeEsc; ?></td>
               <td><?php echo $detailsEsc; ?></td>
               <td><?php echo $createdEsc; ?></td>
-              <!-- ✅ Flex gap সহ action cell -->
+              
               <td style="display:flex; gap:8px; flex-wrap:wrap;">
                 <a
                   class="btn sm"
@@ -164,7 +157,6 @@ if (isset($_GET['msg'])) {
       <?php endif; ?>
     </div>
 
-    <!-- Edit form -->
     <div id="editBox" class="card" style="padding:16px;display:none;">
       <h3>Edit Preference</h3>
       <form method="post" action="/SmartCafe/controller/customer/preferenceController.php">

@@ -5,7 +5,6 @@ session_start();
 $loggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$loggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
-    exit();
 }
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/itemModel.php");
@@ -56,7 +55,6 @@ if (isset($_GET['msg'])) {
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
   <title>Menu - SmartCafe</title>
   <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
 </head>

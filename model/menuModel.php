@@ -1,5 +1,5 @@
 <?php
-require_once('../../model/dbConnect.php');
+require_once('dbConnect.php');
 
 function getMenuItems() {
     $conn = getConnect();
@@ -23,7 +23,6 @@ function addMenuItem($name, $description, $price, $image_url = null, $available 
     $sql = "INSERT INTO menuitems (name, description, price, image_url, available, created_at) 
             VALUES (?, ?, ?, ?, ?, NOW())";
     $stmt = mysqli_prepare($conn, $sql);
-    // “d” for decimal/double, “s” for string, “i” for integer
     mysqli_stmt_bind_param($stmt, "ssdsi", $name, $description, $price, $image_url, $available);
     $ok = mysqli_stmt_execute($stmt);
     $menu_item_id = $ok ? mysqli_insert_id($conn) : null;
@@ -70,7 +69,6 @@ function updateMenuItem($id, $fields) {
 
     $sql = "UPDATE menuitems SET " . implode(", ", $set) . " WHERE menu_item_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
-    // Append type and value for the WHERE id
     mysqli_stmt_bind_param($stmt, $types . 'i', ...array_merge($vals, [$id]));
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);

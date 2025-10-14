@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-
-
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -11,12 +9,9 @@ if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/itemModel.php");
 
-
-
 if (!isset($_SESSION["cart"])) {
     $_SESSION["cart"] = array();
 }
-
 
 $action = '';
 if (isset($_POST['action'])) {
@@ -29,15 +24,13 @@ if (isset($_POST['action'])) {
     }
 }
 
-
 if ($action === 'add') {
-    
+   
     $id = 0;
     if (isset($_POST['menu_item_id'])) {
         $id = (int)$_POST['menu_item_id'];
     }
 
-    
     $qty = 1;
     if (isset($_POST['qty'])) {
         $qty = (int)$_POST['qty'];
@@ -49,7 +42,7 @@ if ($action === 'add') {
     $item = null;
 
     if ($id > 0) {
-        
+       
         $db = getMenuItemById($id);
         if ($db) {
             $tmpId = 0;
@@ -102,7 +95,6 @@ if ($action === 'add') {
         exit();
     }
 
-
     $found = false;
     foreach ($_SESSION["cart"] as &$c) {
         
@@ -117,7 +109,7 @@ if ($action === 'add') {
                 break;
             }
         } else {
-       
+      
             $cName = '';
             if (isset($c['name'])) {
                 $cName = $c['name'];
@@ -139,6 +131,7 @@ if ($action === 'add') {
         }
     }
     unset($c); 
+
     if (!$found) {
         $_SESSION["cart"][] = array(
             'menu_item_id' => $item['menu_item_id'],
@@ -151,7 +144,6 @@ if ($action === 'add') {
     header("Location: /SmartCafe/view/customer/cart.php");
     exit();
 }
-
 
 if ($action === 'update') {
     $hasQtyArray = (isset($_POST['qty']) && is_array($_POST['qty']));
@@ -171,7 +163,6 @@ if ($action === 'update') {
     exit();
 }
 
-
 if ($action === 'remove') {
     $idx = -1;
     if (isset($_GET['idx'])) {
@@ -185,7 +176,6 @@ if ($action === 'remove') {
     header("Location: /SmartCafe/view/customer/cart.php");
     exit();
 }
-
 
 if ($action === 'clear') {
     $_SESSION["cart"] = array();

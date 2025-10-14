@@ -1,5 +1,5 @@
 <?php
-require_once('../../model/manager/menuModel.php');
+require_once('../model/menuModel.php');
 $menu_items = getMenuItems();
 
 foreach ($menu_items as $item) {

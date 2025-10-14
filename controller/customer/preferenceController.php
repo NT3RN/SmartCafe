@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-/* Auth guard: Customer only
- */
 $isLogged = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLogged || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -11,8 +9,6 @@ if (!$isLogged || $_SESSION["role"] !== "Customer") {
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/preferenceModel.php");
 
-/*  Resolve customerId without ?? shorthand
- */
 $customerId = 0;
 if (isset($_SESSION['customer_id'])) {
     $customerId = $_SESSION['customer_id'];
@@ -25,8 +21,6 @@ if (!$customerId) {
     $customerId = pref_getCustomerIdByEmail($emailForLookup);
 }
 
-/*  Detect action (POST first, then GET)
- */
 $action = '';
 if (isset($_POST['action'])) {
     $action = $_POST['action'];
@@ -38,8 +32,6 @@ if (isset($_POST['action'])) {
     }
 }
 
-/*  Add preference
- */
 if ($action === 'add') {
     $type = '';
     if (isset($_POST['preference_type'])) {
@@ -70,9 +62,7 @@ if ($action === 'add') {
     exit();
 }
 
-/* 
-    Delete preference
- */
+
 if ($action === 'delete') {
     $id = 0;
     if (isset($_GET['id'])) {
@@ -92,8 +82,6 @@ if ($action === 'delete') {
     exit();
 }
 
-/*  Update preference
- */
 if ($action === 'update') {
     $id = 0;
     if (isset($_POST['pref_id'])) {
@@ -129,7 +117,5 @@ if ($action === 'update') {
     exit();
 }
 
-/*  Default redirect
- */
 header("Location: /SmartCafe/view/customer/preferences.php");
 exit();

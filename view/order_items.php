@@ -1,5 +1,5 @@
 <?php
-require_once('../../model/manager/ordersModel.php');
+require_once('../model/ordersModel.php');
 
 $orders = getAllOrders();
 

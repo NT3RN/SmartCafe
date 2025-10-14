@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -12,7 +11,6 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/itemModel.ph
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/orderModel.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/paymentModel.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
-
 
 $cart = array();
 if (isset($_SESSION["cart"])) {
@@ -25,7 +23,6 @@ if ($isCartEmpty) {
     header("Location: /SmartCafe/view/customer/cart.php?msg=" . $msg);
     exit();
 }
-
 
 $isPost = ($_SERVER["REQUEST_METHOD"] === "POST");
 $hasPayNow = (isset($_POST["pay_now"]));
@@ -80,7 +77,6 @@ if ($isPost && $hasPayNow) {
         exit();
     }
 
-    
     $ui = '';
     if (isset($_POST['payment_method'])) {
         $ui = $_POST['payment_method'];
@@ -103,7 +99,6 @@ if ($isPost && $hasPayNow) {
         }
     }
 
-    
     $conn = getConnect();
 
     $email = '';
@@ -136,7 +131,6 @@ if ($isPost && $hasPayNow) {
         exit();
     }
 
-   
     $ok = createPayment($order_id, $total, $methodEnum);
 
     if ($ok) {
@@ -150,7 +144,6 @@ if ($isPost && $hasPayNow) {
         exit();
     }
 }
-
 
 header("Location: /SmartCafe/view/customer/checkout.php");
 exit();

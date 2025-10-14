@@ -1,5 +1,5 @@
 <?php
-require_once('../../model/manager/inventoryModel.php');
+require_once('../model/inventoryModel.php');
 $inventory_items = getInventoryItems();
 
 foreach ($inventory_items as $item) {

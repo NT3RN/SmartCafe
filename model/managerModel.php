@@ -3,7 +3,11 @@ require_once("dbConnect.php");
 
 function getAllManagers() {
     $conn = getConnect();
-    $sql = "SELECT u.user_id, u.username, u.email, u.created_at, m.salary FROM Users u JOIN Managers m ON u.user_id = m.manager_id WHERE u.role = 'Manager' ORDER BY u.created_at DESC";
+    $sql = "SELECT u.user_id, u.username, u.email, u.created_at, m.salary 
+            FROM Users u
+            JOIN Managers m ON u.user_id = m.manager_id
+            WHERE u.role = 'Manager'
+            ORDER BY u.created_at DESC";
     $result = mysqli_query($conn, $sql);
     
     $managers = [];
@@ -17,12 +21,20 @@ function getAllManagers() {
 
 function addManager($username, $email, $password, $security_question, $security_answer, $salary) {
     $conn = getConnect();
+    
+    $username = mysqli_real_escape_string($conn, $username);
+    $email = mysqli_real_escape_string($conn, $email);
+    $password = mysqli_real_escape_string($conn, $password);
+    $security_question = mysqli_real_escape_string($conn, $security_question);
+    $security_answer = mysqli_real_escape_string($conn, $security_answer);
     $salary = floatval($salary);
     $role = 'Manager';
     
+
     mysqli_begin_transaction($conn); 
     try {
-        $sql = "INSERT INTO Users (username, email, password, role, security_question, security_answer) VALUES ('$username', '$email', '$password', '$role', '$security_question', '$security_answer')";
+        $sql = "INSERT INTO Users (username, email, password, role, security_question, security_answer) 
+                VALUES ('$username', '$email', '$password', '$role', '$security_question', '$security_answer')";
         
         if (!mysqli_query($conn, $sql)) {
             throw new Exception("Failed to insert user");
@@ -47,7 +59,9 @@ function addManager($username, $email, $password, $security_question, $security_
 }
 
 function checkEmailExists($email) {
-    $conn = getConnect();    
+    $conn = getConnect();
+    $email = mysqli_real_escape_string($conn, $email);
+    
     $sql = "SELECT 1 FROM Users WHERE email='$email'";
     $result = mysqli_query($conn, $sql);
     
@@ -59,6 +73,8 @@ function checkEmailExists($email) {
 
 function deleteManager($user_id) {
     $conn = getConnect();
+    $user_id = mysqli_real_escape_string($conn, $user_id);
+    
     $sql = "DELETE FROM Users WHERE user_id='$user_id' AND role='Manager'";
     $result = mysqli_query($conn, $sql);
     

@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
@@ -10,7 +9,6 @@ if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/orderModel.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
-
 
 $conn = getConnect();
 
@@ -37,7 +35,6 @@ if (!is_array($row) || !isset($row['user_id'])) {
 
 $customer_id = (int)$row['user_id'];
 
-
 $action = '';
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -61,7 +58,6 @@ if ($action === 'cancel') {
     header("Location: /SmartCafe/view/customer/orders.php?msg=" . urlencode($msg));
     exit();
 }
-
 
 header("Location: /SmartCafe/view/customer/orders.php");
 exit();

@@ -1,5 +1,5 @@
 <?php
-require_once('../../model/dbConnect.php');
+require_once('dbConnect.php');
 
 function getInventoryItems($lowStockOnly = false) {
     $conn = getConnect();

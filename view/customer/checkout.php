@@ -5,7 +5,6 @@ session_start();
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
-    exit();
 }
 
 $cart = [];
@@ -39,7 +38,6 @@ if (isset($_GET['msg'])) {
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
   <title>Checkout - SmartCafe</title>
   <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
 </head>

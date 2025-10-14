@@ -4,7 +4,6 @@ session_start();
 $isLoggedIn = (isset($_SESSION["email"]) && isset($_SESSION["role"]));
 if (!$isLoggedIn || $_SESSION["role"] !== "Customer") {
     header("Location: /SmartCafe/view/login.php");
-    exit();
 }
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/dbConnect.php");
@@ -27,7 +26,6 @@ if ($res) {
 mysqli_close($conn);
 if (!is_array($row) || !isset($row['user_id'])) {
     header("Location: /SmartCafe/view/login.php");
-    exit();
 }
 
 $customer_id = (int)$row['user_id'];
@@ -43,7 +41,6 @@ if (isset($_GET['msg'])) {
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
   <title>My Orders - SmartCafe</title>
   <link rel="stylesheet" href="/SmartCafe/view/css/customer.css">
 </head>

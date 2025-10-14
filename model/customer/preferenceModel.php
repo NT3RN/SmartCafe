@@ -32,7 +32,7 @@ function pref_getCustomerIdByEmail($email) {
         mysqli_close($conn);
         return $cidVal;
     } else {
-        // Prepare failed
+      
         mysqli_close($conn);
         return 0;
     }
@@ -74,7 +74,7 @@ function pref_all($customerId) {
 
         return $rows;
     } else {
-        // Prepare failed
+        
         mysqli_close($conn);
         return array();
     }
@@ -107,7 +107,7 @@ function pref_add($customerId, $type, $details) {
 
         return $isSuccess;
     } else {
-        // Prepare failed
+     
         mysqli_close($conn);
         return false;
     }
@@ -140,7 +140,7 @@ function pref_delete($customerId, $prefId) {
 
         return $isSuccess;
     } else {
-        // Prepare failed
+        
         mysqli_close($conn);
         return false;
     }
@@ -174,7 +174,7 @@ function pref_update($customerId, $prefId, $type, $details) {
 
         return $isSuccess;
     } else {
-        // Prepare failed
+        
         mysqli_close($conn);
         return false;
     }
