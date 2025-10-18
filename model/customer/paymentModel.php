@@ -23,7 +23,7 @@ function createPayment($order_id, $amount, $method) {
     $conn = getConnect();
 
     $sql = "
-        INSERT INTO Payments (order_id, amount, payment_method, payment_status, paid_at)
+        INSERT INTO payments (order_id, amount, payment_method, payment_status, paid_at)
         VALUES ($order_id, $amount, '$methodClean', 'Paid', NOW())
     ";
 

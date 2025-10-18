@@ -8,7 +8,7 @@ function getActiveMenuItems() {
 
     $sql = "
         SELECT menu_item_id, name, description, price, image_url
-        FROM MenuItems
+        FROM menuitems
         WHERE available = 1
         ORDER BY menu_item_id DESC
     ";
@@ -47,7 +47,7 @@ function getMenuItemById($id) {
 
     $sql = "
         SELECT menu_item_id, name, description, price, image_url
-        FROM MenuItems
+        FROM menuitems
         WHERE available = 1 AND menu_item_id = $id
         LIMIT 1
     ";

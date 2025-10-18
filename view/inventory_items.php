@@ -1,7 +1,7 @@
+
 <?php
 require_once('../model/inventoryModel.php');
 $inventory_items = getInventoryItems();
-
 foreach ($inventory_items as $item) {
     echo '<div class="flex justify-between items-center border-b py-2">';
     echo '<div>';

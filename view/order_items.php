@@ -1,8 +1,7 @@
+
 <?php
 require_once('../model/ordersModel.php');
-
 $orders = getAllOrders();
-
 foreach ($orders as $order) {
     echo '<div class="flex justify-between items-center border-b py-2">';
     echo '<div>';

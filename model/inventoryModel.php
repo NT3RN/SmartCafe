@@ -20,13 +20,27 @@ function getInventoryItems($lowStockOnly = false) {
 }
 function restockItem($menu_item_id, $quantity) {
     $conn = getConnect();
-    $sql = "INSERT INTO inventory (menu_item_id, stock_quantity) VALUES (?, ?) ON DUPLICATE KEY UPDATE stock_quantity = stock_quantity + ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "iii", $menu_item_id, $quantity, $quantity);
-    $ok = mysqli_stmt_execute($stmt);
+    // First try to update existing inventory row
+    $sqlUpdate = "UPDATE inventory SET stock_quantity = stock_quantity + ?, last_restock_date = CURDATE() WHERE menu_item_id = ?";
+    $stmt = mysqli_prepare($conn, $sqlUpdate);
+    mysqli_stmt_bind_param($stmt, "ii", $quantity, $menu_item_id);
+    mysqli_stmt_execute($stmt);
+    $affected = mysqli_stmt_affected_rows($stmt);
     mysqli_stmt_close($stmt);
+
+    if ($affected === 0) {
+        // No existing row, insert a new one
+        $sqlInsert = "INSERT INTO inventory (menu_item_id, stock_quantity, last_restock_date) VALUES (?, ?, CURDATE())";
+        $stmt2 = mysqli_prepare($conn, $sqlInsert);
+        mysqli_stmt_bind_param($stmt2, "ii", $menu_item_id, $quantity);
+        $ok = mysqli_stmt_execute($stmt2);
+        mysqli_stmt_close($stmt2);
+        mysqli_close($conn);
+        return $ok;
+    }
+
     mysqli_close($conn);
-    return $ok;
+    return true;
 }
 
 function adjustStock($menu_item_id, $quantity) {
@@ -34,9 +48,20 @@ function adjustStock($menu_item_id, $quantity) {
     $sql = "UPDATE inventory SET stock_quantity = stock_quantity + ? WHERE menu_item_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "ii", $quantity, $menu_item_id);
-    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
+    $affected = mysqli_stmt_affected_rows($stmt);
     mysqli_stmt_close($stmt);
+    if ($affected === 0 && $quantity > 0) {
+        // create row if adjusting positive stock and none exists
+        $sqlInsert = "INSERT INTO inventory (menu_item_id, stock_quantity) VALUES (?, ?)";
+        $stmt2 = mysqli_prepare($conn, $sqlInsert);
+        mysqli_stmt_bind_param($stmt2, "ii", $menu_item_id, $quantity);
+        $ok = mysqli_stmt_execute($stmt2);
+        mysqli_stmt_close($stmt2);
+        mysqli_close($conn);
+        return $ok;
+    }
     mysqli_close($conn);
-    return $ok;
+    return ($affected >= 0);
 }
 ?>

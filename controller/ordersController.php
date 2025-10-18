@@ -3,7 +3,7 @@ session_start();
 require_once('../model/ordersModel.php');
 
 if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
-    header('Location: /login.php');
+    header('Location: /SmartCafe/view/login.php');
     exit();
 }
 
@@ -16,7 +16,7 @@ if ($method === 'GET') {
 }
 
 if ($method === 'PATCH') {
-    $id = $_GET['id'] ?? 0;
+    $id = intval($_GET['id'] ?? 0);
     $data = json_decode(file_get_contents("php://input"), true);
     $newStatus = $data['to'] ?? '';
 

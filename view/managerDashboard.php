@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
-    header('Location: /login.php');
+    header('Location: /SmartCafe/view/login.php');
     exit();
 }
 ?>
@@ -11,7 +11,7 @@ if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manager Dashboard</title>
-    <link href="/css/managerDashboard.css" rel="stylesheet">
+    <link href="/SmartCafe/view/css/managerDashboard.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-6">
@@ -49,6 +49,6 @@ if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
         </div>
     </div>
 
-    <script src="/js/managerDashboard.js"></script>
+    <script src="/SmartCafe/view/js/managerDashboard.js"></script>
 </body>
 </html>

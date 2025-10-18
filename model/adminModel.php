@@ -3,7 +3,7 @@ require_once("dbConnect.php");
 
 function getAllAdmins() {
     $conn = getConnect();
-    $sql = "SELECT user_id, username, email, created_at FROM Users WHERE role = 'Admin'ORDER BY created_at DESC";
+    $sql = "SELECT user_id, username, email, created_at FROM users WHERE role = 'Admin' ORDER BY created_at DESC";
     $result = mysqli_query($conn, $sql);
     
     $admins = [];
@@ -18,7 +18,7 @@ function addAdmin($username, $email, $password, $security_question, $security_an
     $conn = getConnect();
     $role = 'Admin';
     
-    $sql = "INSERT INTO Users (username, email, password, role, security_question, security_answer) VALUES ('$username', '$email', '$password', '$role', '$security_question', '$security_answer')";
+    $sql = "INSERT INTO users (username, email, password, role, security_question, security_answer) VALUES ('$username', '$email', '$password', '$role', '$security_question', '$security_answer')";
     
     $result = mysqli_query($conn, $sql);
     mysqli_close($conn);
@@ -28,7 +28,7 @@ function addAdmin($username, $email, $password, $security_question, $security_an
 
 function checkEmailExists($email) {
     $conn = getConnect();
-    $sql = "SELECT 1 FROM Users WHERE email='$email'";
+    $sql = "SELECT 1 FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $sql);
     
     $exists = mysqli_num_rows($result) > 0;
@@ -39,7 +39,7 @@ function checkEmailExists($email) {
 
 function deleteAdmin($user_id) {
     $conn = getConnect();
-    $sql = "DELETE FROM Users WHERE user_id='$user_id' AND role='Admin'";
+    $sql = "DELETE FROM users WHERE user_id='$user_id' AND role='Admin'";
     $result = mysqli_query($conn, $sql);
     
     $affected = mysqli_affected_rows($conn);
@@ -50,7 +50,7 @@ function deleteAdmin($user_id) {
 
 function getAdminProfile($user_id) {
     $conn = getConnect();
-    $sql = "SELECT user_id, username, email, security_question, security_answer, created_at FROM Users WHERE user_id='$user_id' AND role='Admin'";
+    $sql = "SELECT user_id, username, email, security_question, security_answer, created_at FROM users WHERE user_id='$user_id' AND role='Admin'";
     $result = mysqli_query($conn, $sql);
     
     $profile = mysqli_fetch_assoc($result);
@@ -61,7 +61,7 @@ function getAdminProfile($user_id) {
 
 function verifyCurrentPassword($user_id, $current_password) {
     $conn = getConnect();
-    $sql = "SELECT 1 FROM Users WHERE user_id='$user_id' AND password='$current_password'";
+    $sql = "SELECT 1 FROM users WHERE user_id='$user_id' AND password='$current_password'";
     $result = mysqli_query($conn, $sql);
     
     $valid = mysqli_num_rows($result) > 0;
@@ -72,7 +72,7 @@ function verifyCurrentPassword($user_id, $current_password) {
 
 function checkEmailExistsForOtherUser($email, $user_id) {
     $conn = getConnect();
-    $sql = "SELECT 1 FROM Users WHERE email='$email' AND user_id != '$user_id'";
+    $sql = "SELECT 1 FROM users WHERE email='$email' AND user_id != '$user_id'";
     $result = mysqli_query($conn, $sql);
     
     $exists = mysqli_num_rows($result) > 0;
@@ -85,9 +85,9 @@ function updateAdminProfile($user_id, $username, $email, $new_password, $securit
     $conn = getConnect();
 
     if (!empty($new_password)) {
-        $sql = "UPDATE Users SET username='$username', email='$email', password='$new_password',security_question='$security_question',security_answer='$security_answer'WHERE user_id='$user_id' AND role='Admin'";
+    $sql = "UPDATE users SET username='$username', email='$email', password='$new_password', security_question='$security_question', security_answer='$security_answer' WHERE user_id='$user_id' AND role='Admin'";
     } else {
-        $sql = "UPDATE Users SET username='$username', email='$email', security_question='$security_question', security_answer='$security_answer' WHERE user_id='$user_id' AND role='Admin'";
+    $sql = "UPDATE users SET username='$username', email='$email', security_question='$security_question', security_answer='$security_answer' WHERE user_id='$user_id' AND role='Admin'";
     }
     
     $result = mysqli_query($conn, $sql);

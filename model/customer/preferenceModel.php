@@ -6,8 +6,8 @@ function pref_getCustomerIdByEmail($email) {
 
     $sql = "
         SELECT c.customer_id
-        FROM Users u
-        JOIN Customers c ON c.customer_id = u.user_id
+        FROM users u
+        JOIN customers c ON c.customer_id = u.user_id
         WHERE u.email = ?
         LIMIT 1
     ";
@@ -44,8 +44,8 @@ function pref_all($customerId) {
     $conn = getConnect();
 
     $sql = "
-        SELECT preference_id, preference_type, details, created_at
-        FROM MealPreferences
+        SELECT preference_id, preference_type, details
+        FROM mealpreferences
         WHERE customer_id = ?
         ORDER BY preference_id DESC
     ";
@@ -85,7 +85,7 @@ function pref_add($customerId, $type, $details) {
     $conn = getConnect();
 
     $sql = "
-        INSERT INTO MealPreferences (customer_id, preference_type, details)
+        INSERT INTO mealpreferences (customer_id, preference_type, details)
         VALUES (?,?,?)
     ";
 
@@ -118,7 +118,7 @@ function pref_delete($customerId, $prefId) {
     $conn = getConnect();
 
     $sql = "
-        DELETE FROM MealPreferences
+        DELETE FROM mealpreferences
         WHERE preference_id = ? AND customer_id = ?
     ";
 
@@ -151,7 +151,7 @@ function pref_update($customerId, $prefId, $type, $details) {
     $conn = getConnect();
 
     $sql = "
-        UPDATE MealPreferences
+        UPDATE mealpreferences
         SET preference_type = ?, details = ?
         WHERE preference_id = ? AND customer_id = ?
     ";

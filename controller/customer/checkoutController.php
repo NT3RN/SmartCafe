@@ -107,7 +107,7 @@ if ($isPost && $hasPayNow) {
     }
     $safeEmail = mysqli_real_escape_string($conn, $email);
 
-    $sql = "SELECT user_id FROM Users WHERE email='$safeEmail' AND role='Customer' LIMIT 1";
+    $sql = "SELECT user_id FROM users WHERE email='$safeEmail' AND role='Customer' LIMIT 1";
     $res = mysqli_query($conn, $sql);
 
     $row = null;

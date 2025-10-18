@@ -4,8 +4,8 @@ require_once("dbConnect.php");
 function getAllManagers() {
     $conn = getConnect();
     $sql = "SELECT u.user_id, u.username, u.email, u.created_at, m.salary 
-            FROM Users u
-            JOIN Managers m ON u.user_id = m.manager_id
+        FROM users u
+        JOIN managers m ON u.user_id = m.manager_id
             WHERE u.role = 'Manager'
             ORDER BY u.created_at DESC";
     $result = mysqli_query($conn, $sql);
@@ -33,7 +33,7 @@ function addManager($username, $email, $password, $security_question, $security_
 
     mysqli_begin_transaction($conn); 
     try {
-        $sql = "INSERT INTO Users (username, email, password, role, security_question, security_answer) 
+    $sql = "INSERT INTO users (username, email, password, role, security_question, security_answer) 
                 VALUES ('$username', '$email', '$password', '$role', '$security_question', '$security_answer')";
         
         if (!mysqli_query($conn, $sql)) {
@@ -42,7 +42,8 @@ function addManager($username, $email, $password, $security_question, $security_
         
         $user_id = mysqli_insert_id($conn);
         
-        $managerSql = "UPDATE Managers SET salary = $salary WHERE manager_id = $user_id";
+    // Trigger creates row in managers; update salary afterwards
+    $managerSql = "UPDATE managers SET salary = $salary WHERE manager_id = $user_id";
         if (!mysqli_query($conn, $managerSql)) {
             throw new Exception("Failed to update manager salary");
         }
@@ -62,7 +63,7 @@ function checkEmailExists($email) {
     $conn = getConnect();
     $email = mysqli_real_escape_string($conn, $email);
     
-    $sql = "SELECT 1 FROM Users WHERE email='$email'";
+    $sql = "SELECT 1 FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $sql);
     
     $exists = mysqli_num_rows($result) > 0;
@@ -75,7 +76,7 @@ function deleteManager($user_id) {
     $conn = getConnect();
     $user_id = mysqli_real_escape_string($conn, $user_id);
     
-    $sql = "DELETE FROM Users WHERE user_id='$user_id' AND role='Manager'";
+    $sql = "DELETE FROM users WHERE user_id='$user_id' AND role='Manager'";
     $result = mysqli_query($conn, $sql);
     
     $affected = mysqli_affected_rows($conn);

@@ -3,7 +3,7 @@ session_start();
 require_once('../model/menuModel.php');
 
 if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
-    header('Location: /login.php');
+    header('Location: /SmartCafe/view/login.php');
     exit();
 }
 
@@ -19,15 +19,19 @@ if ($method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $name = $data['name'] ?? '';
     $description = $data['description'] ?? '';
-    $price_cents = $data['price_cents'] ?? 0;
+    $image_url = $data['image_url'] ?? null;
+    $available = isset($data['available']) ? (int)$data['available'] : 1;
+    // DB uses decimal(10,2) price field in menuitems
+    $price = isset($data['price']) ? floatval($data['price']) : 0;
     
-    if (empty($name) || empty($price_cents)) {
+    if (empty($name) || $price <= 0) {
         http_response_code(400);
         echo json_encode(['error' => 'Name and price are required']);
         exit();
     }
 
-    $menu_item_id = addMenuItem($name, $description, $price_cents);
+    $managerId = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : null;
+    $menu_item_id = addMenuItem($name, $description, $price, $image_url, $available, $managerId);
     echo json_encode(['menu_item_id' => $menu_item_id]);
     exit();
 }

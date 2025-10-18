@@ -3,7 +3,8 @@ session_start();
 
 
 if (!isset($_SESSION["email"], $_SESSION["role"]) || $_SESSION["role"] !== "Customer") {
-    header("Location: /SmartCafe/view/login.php");
+  header("Location: /SmartCafe/view/login.php");
+  exit();
 }
 ?>
 <!doctype html>

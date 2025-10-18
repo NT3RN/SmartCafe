@@ -18,12 +18,19 @@ function getMenuItems() {
     return $items;
 }
 
-function addMenuItem($name, $description, $price, $image_url = null, $available = 1) {
+function addMenuItem($name, $description, $price, $image_url = null, $available = 1, $managed_by = null) {
     $conn = getConnect();
-    $sql = "INSERT INTO menuitems (name, description, price, image_url, available, created_at) 
-            VALUES (?, ?, ?, ?, ?, NOW())";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssdsi", $name, $description, $price, $image_url, $available);
+    if ($managed_by === null) {
+        $sql = "INSERT INTO menuitems (name, description, price, image_url, available, created_at) 
+                VALUES (?, ?, ?, ?, ?, NOW())";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ssdsi", $name, $description, $price, $image_url, $available);
+    } else {
+        $sql = "INSERT INTO menuitems (name, description, price, image_url, available, managed_by, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, NOW())";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ssdsii", $name, $description, $price, $image_url, $available, $managed_by);
+    }
     $ok = mysqli_stmt_execute($stmt);
     $menu_item_id = $ok ? mysqli_insert_id($conn) : null;
     mysqli_stmt_close($stmt);

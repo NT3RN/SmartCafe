@@ -13,7 +13,7 @@ function createOrderWithItems($customer_id, $items) {
     $conn = getConnect();
 
     $sqlOrder = "
-        INSERT INTO Orders (customer_id, order_status)
+        INSERT INTO orders (customer_id, order_status)
         VALUES ($customer_id, 'Pending')
     ";
 
@@ -46,7 +46,7 @@ function createOrderWithItems($customer_id, $items) {
         }
 
         $sqlItem = "
-            INSERT INTO OrderItems (order_id, menu_item_id, quantity)
+            INSERT INTO orderitems (order_id, menu_item_id, quantity)
             VALUES ($order_id, $menu_item_id, $quantity)
         ";
 
@@ -74,7 +74,7 @@ function getOrdersByCustomer($customer_id) {
 
     $sql = "
         SELECT order_id, order_status, created_at
-        FROM Orders
+        FROM orders
         WHERE customer_id = $customer_id
         ORDER BY order_id DESC
     ";
@@ -108,13 +108,13 @@ function cancelOrderIfPending($customer_id, $order_id) {
 
     $conn = getConnect();
 
-    $sql = "
-        UPDATE Orders
-        SET order_status = 'Cancelled'
-        WHERE order_id = $order_id
-          AND customer_id = $customer_id
-          AND order_status = 'Pending'
-    ";
+        $sql = "
+                UPDATE orders
+                SET order_status = 'Cancelled'
+                WHERE order_id = $order_id
+                    AND customer_id = $customer_id
+                    AND order_status = 'Pending'
+        ";
 
     mysqli_query($conn, $sql);
 

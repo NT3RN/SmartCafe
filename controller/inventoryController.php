@@ -1,16 +1,16 @@
 <?php
 session_start();
-require_once('../modelinventoryModel.php');
+require_once('../model/inventoryModel.php');
 
 if (!isset($_SESSION["email"]) || $_SESSION["role"] !== "Manager") {
-    header('Location: /login.php');
+    header('Location: /SmartCafe/view/login.php');
     exit();
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
-    $lowStockOnly = $_GET['lowStockOnly'] === '1';
+    $lowStockOnly = (isset($_GET['lowStockOnly']) && $_GET['lowStockOnly'] === '1');
     $inventory_items = getInventoryItems($lowStockOnly);
     echo json_encode($inventory_items);
     exit();
@@ -18,7 +18,7 @@ if ($method === 'GET') {
 
 if ($method === 'POST') {
     $action = $_GET['action'] ?? '';
-    $menu_item_id = $_GET['menu_item_id'] ?? 0;
+    $menu_item_id = intval($_GET['menu_item_id'] ?? 0);
 
     if ($menu_item_id <= 0) {
         http_response_code(400);
@@ -29,7 +29,7 @@ if ($method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     
     if ($action === 'receive') {
-        $quantity = $data['quantity'] ?? 0;
+        $quantity = intval($data['quantity'] ?? 0);
         if ($quantity <= 0) {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid quantity']);
@@ -42,7 +42,7 @@ if ($method === 'POST') {
     }
 
     if ($action === 'adjust') {
-        $quantity = $data['quantity'] ?? 0;
+        $quantity = intval($data['quantity'] ?? 0);
         if ($quantity === 0) {
             http_response_code(400);
             echo json_encode(['error' => 'Quantity cannot be zero']);

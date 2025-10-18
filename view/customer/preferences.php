@@ -122,11 +122,8 @@ if (isset($_GET['msg'])) {
               }
               $detailsEsc = htmlspecialchars($detailsRaw);
 
-              $createdRaw = '';
-              if (isset($p['created_at'])) {
-                  $createdRaw = $p['created_at'];
-              }
-              $createdEsc = htmlspecialchars($createdRaw);
+        // mealpreferences has no created_at column in provided schema
+        $createdEsc = '';
           ?>
             <tr>
               <td><?php echo $i; $i++; ?></td>

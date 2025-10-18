@@ -11,41 +11,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/SmartCafe/model/customer/itemModel.ph
 
 $dbItems = getActiveMenuItems();
 
-$defaultItems = [
-    ['menu_item_id' => -101, 'name' => 'Pizza',        'description' => 'Cheesy pizza slice',    'price' => 150, 'image_url' => 'pizza.jpg'],
-    ['menu_item_id' => -102, 'name' => 'Burger',       'description' => 'Juicy beef burger',     'price' => 180, 'image_url' => 'burger.jpg'],
-    ['menu_item_id' => -103, 'name' => 'Shawarma',     'description' => 'Chicken shawarma roll',  'price' => 160, 'image_url' => 'shawarma.jpg'],
-    ['menu_item_id' => -104, 'name' => 'Cold Coffee',  'description' => 'Iced cold coffee',      'price' => 120, 'image_url' => 'cold_coffee.jpg'],
-    ['menu_item_id' => -105, 'name' => 'Hot Coffee',   'description' => 'Fresh hot coffee',      'price' => 100, 'image_url' => 'hot_coffee.jpg'],
-    ['menu_item_id' => -106, 'name' => 'Fried Rice',   'description' => 'Egg fried rice',        'price' => 140, 'image_url' => 'fried_rice.jpg'],
-    ['menu_item_id' => -107, 'name' => 'Chicken Fry',  'description' => 'Crispy chicken fry',    'price' => 170, 'image_url' => 'chicken_fry.jpg'],
-    ['menu_item_id' => -108, 'name' => 'Vegetable',    'description' => 'Mixed veg bowl',        'price' => 110, 'image_url' => 'vegetable.jpg'],
-];
 
-function normalizeString($value) {
-    if (!isset($value)) {
-        return '';
-    }
-    $trimmed = trim($value);
-    $lower   = strtolower($trimmed);
-    return $lower;
-}
-
-$byName = [];
-
-for ($i = 0; $i < count($defaultItems); $i++) {
-    $d = $defaultItems[$i];
-    $key = normalizeString(isset($d['name']) ? $d['name'] : '');
-    $byName[$key] = $d;
-}
-
-for ($j = 0; $j < count($dbItems); $j++) {
-    $it = $dbItems[$j];
-    $key = normalizeString(isset($it['name']) ? $it['name'] : '');
-    $byName[$key] = $it; 
-}
-
-$items = array_values($byName);
+$items = $dbItems;
 
 $msg = '';
 if (isset($_GET['msg'])) {

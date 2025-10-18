@@ -3,7 +3,7 @@ require_once("dbConnect.php");
 
 function getUserByEmail($email) {
     $conn = getConnect();
-    $sql  = "SELECT user_id, username, email, role FROM Users WHERE email = ? LIMIT 1";
+    $sql  = "SELECT user_id, username, email, role FROM users WHERE email = ? LIMIT 1";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);

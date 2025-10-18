@@ -15,7 +15,7 @@ if (isset($_SESSION["email"])) {
 }
 $email = mysqli_real_escape_string($conn, $email);
 
-$sql = "SELECT user_id FROM Users WHERE email='$email' AND role='Customer' LIMIT 1";
+$sql = "SELECT user_id FROM users WHERE email='$email' AND role='Customer' LIMIT 1";
 $res = mysqli_query($conn, $sql);
 
 $row = null;

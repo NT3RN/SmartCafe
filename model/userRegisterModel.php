@@ -3,7 +3,7 @@ require_once("dbConnect.php");
 
 function doseEmailExists($email) {
     $conn = getConnect();
-    $sql  = "SELECT 1 FROM Users WHERE email = ?";
+    $sql  = "SELECT 1 FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
@@ -16,7 +16,7 @@ function doseEmailExists($email) {
 
 function insertUser($username, $email, $password, $role, $security_question, $security_answer) {
     $conn = getConnect();
-    $sql  = "INSERT INTO Users (username, email, password, role, security_question, security_answer)
+    $sql  = "INSERT INTO users (username, email, password, role, security_question, security_answer)
             VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "ssssss", $username, $email, $password, $role, $security_question, $security_answer);
