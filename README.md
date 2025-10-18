@@ -4,9 +4,9 @@ It provides user authentication, role-based dashboards (Admin / Manager / Custom
 
 ## Contributors
 
-| **Name** | **Institution** | **GitHub Link** |
-| --- | --- | --- |
-| S M Nafim Niloy | AIUB | [NT3RN](https://github.com/NT3RN) |
-| Abdullah Al Hasib | AIUB | [Hasib8](https://github.com/Hasib8) |
-| Sadman Hossain | AIUB | [Niloyboss784](https://github.com/Niloyboss784) |
+| **Name** | **Institution** | **GitHub Link** | **Contribution** |
+| --- | --- | --- | --- |
+| S M Nafim Niloy | AIUB | [NT3RN](https://github.com/NT3RN) | Admin Dashboard and Login page |
+| Abdullah Al Hasib | AIUB | [Hasib8](https://github.com/Hasib8) | Manager Dashboard and forget password page |
+| Sadman Hossain | AIUB | [Niloyboss784](https://github.com/Niloyboss784) | Landing Page for Customer and customer registration page |
 
