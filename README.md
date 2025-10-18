@@ -4,9 +4,9 @@ It provides user authentication, role-based dashboards (Admin / Manager / Custom
 
 ## Contributors
 
-| Name | GitHub Link |
-| --- | --- |
-| S M Nafim Niloy | [NT3RN](https://github.com/NT3RN) |
-| Abdullah Al Hasib | [Hasib8](https://github.com/Hasib8) |
-| Sadman Hossain | [Niloyboss784](https://github.com/Niloyboss784) |
+| Name | Institute | GitHub Link |
+| --- | --- | --- |
+| S M Nafim Niloy | AIUB | [NT3RN](https://github.com/NT3RN) |
+| Abdullah Al Hasib | AIUB | [Hasib8](https://github.com/Hasib8) |
+| Sadman Hossain | AIUB | [Niloyboss784](https://github.com/Niloyboss784) |
 
